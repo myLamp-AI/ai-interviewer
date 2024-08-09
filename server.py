@@ -15,6 +15,10 @@ socketio = SocketIO(app, cors_allowed_origins="*")
 
 pdf_text = ""
 job_description = ""
+@app.route('/')
+def hello():
+    return {"data":"Hello  World"}
+
 
 @socketio.on('upload_cv')
 def handle_cv_upload(data):
