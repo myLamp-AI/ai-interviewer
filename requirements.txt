@@ -1,0 +1,15 @@
+Flask
+Flask-Cors
+pyaudio
+SpeechRecognition 
+google-cloud-texttospeech  
+python-dotenv 
+gTTS 
+pydub 
+PyPDF2
+realtimetts[all]
+langchain
+langchain_community
+langchain-google-genai
+
+
