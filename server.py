@@ -7,6 +7,7 @@ from flask import Flask
 from flask_socketio import SocketIO, emit
 import threading
 import io
+from waitress import serve
 from PyPDF2 import PdfReader
 sys.path.append(os.path.dirname(os.path.abspath(__file__)))
 app = Flask(__name__)
@@ -46,3 +47,4 @@ def start_interview(data):
 
 if __name__ == "__main__":
     socketio.run(app, debug=True)
+    

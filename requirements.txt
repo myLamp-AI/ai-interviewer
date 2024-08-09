@@ -11,5 +11,7 @@ realtimetts[all]
 langchain
 langchain_community
 langchain-google-genai
+gunicorn
+eventlet
 
 
