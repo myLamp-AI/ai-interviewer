@@ -8,7 +8,7 @@ from flask_socketio import SocketIO, emit
 import threading
 import io
 from PyPDF2 import PdfReader
-
+sys.path.append(os.path.dirname(os.path.abspath(__file__)))
 app = Flask(__name__)
 socketio = SocketIO(app, cors_allowed_origins="*")
 
