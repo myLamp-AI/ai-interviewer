@@ -72,7 +72,7 @@
                 document.getElementById('status').innerText = 'Please select a CV file first!';
                 return;
             }
-
+            document.getElementById('status').innerText = 'CV UPLOADED';
             const reader = new FileReader();
             reader.onload = function(event) {
                 const binaryData = event.target.result;
@@ -91,7 +91,7 @@
                 document.getElementById('status').innerText = 'Please enter a job description!';
                 return;
             }
-
+            document.getElementById('status').innerText = 'JD UPLOADED';
             socket.send(JSON.stringify({
                 type: 'analyze_jd',
                 job_description: jobDescription
