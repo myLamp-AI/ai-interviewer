@@ -59,7 +59,6 @@ async def websocket_endpoint(websocket: WebSocket):
                 interview_bot = InterviewBot(cv_text, job_description, results)
                 interview_task = await conduct_interview(interview_bot, websocket)
             elif data['type'] == 'end_interview':
-                interview = False
                 if interview_task:
                     await interview_task
                 print("interview Concluded")
