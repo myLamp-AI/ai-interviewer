@@ -2,13 +2,14 @@
 # import threading
 # import speech_recognition as sr
 # import time
-import os
-from dotenv import load_dotenv
 # from gtts import gTTS
 # from io import BytesIO
 # from pydub import AudioSegment
 # from pydub.playback import play
 # import queue
+
+import os
+from dotenv import load_dotenv
 from PyPDF2 import PdfReader
 load_dotenv()
 import sys
@@ -77,7 +78,7 @@ def save_analysis_results(results):
 #         self.is_exiting = False
 #         self.silence_count = 0
 #         self.max_silence_count = 1
-
+#
 #     def transcribe_audio(self):
 #         while True:
 #             audio = self.audio_queue.get()

@@ -2,7 +2,7 @@ import os
 import re
 import sys
 from dotenv import load_dotenv
-from utils2 import*
+from utils import*
 from prompts import *
 from analyzer import *
 import google.generativeai as genai
@@ -12,6 +12,7 @@ from langchain_core.runnables.history import RunnableWithMessageHistory
 from langchain_community.chat_message_histories import ChatMessageHistory
 #from RealtimeTTS import TextToAudioStream, GTTSEngine
 sys.path.append(os.path.dirname(os.path.abspath(__file__)))
+
 
 # engine = GTTSEngine()  # replace with your TTS engine
 # stream = TextToAudioStream(engine)
