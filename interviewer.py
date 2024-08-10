@@ -18,6 +18,49 @@ stream = TextToAudioStream(engine)
 load_dotenv()
 GOOGLE_API_KEY = os.getenv("GOOGLE_API_KEY")
 
+
+def conduct_interview(bot):
+        for stage in bot.stages:
+            print(f"\n--- {stage} STAGE ---")
+            
+            bot.message_history = ChatMessageHistory()
+            if stage == "TECHNICAL":
+                prompt = PROMPTS[stage].format(skills=bot.cv_parts[stage], job_description=bot.job_description)
+            else:
+                prompt = PROMPTS[stage].format(variable=bot.cv_parts[stage])
+
+            while True:
+                response = bot.get_ai_response(prompt, "Ask your question or exit the interview")
+                
+                next_phase = response.find("move to next phase")
+                if next_phase != -1:
+                    response = response[:next_phase]
+                    move_to_new_phase = True
+                else:
+                    move_to_new_phase = False
+                if response:
+                    if "exit" in response or "interview concluded" in response:
+                        break
+
+                print("Interviewer:", response)
+                bot.text_to_speech(response)
+
+                print("Please speak your answer...")
+                answer = bot.speech_to_text()
+                print("You:", answer)
+                if answer:
+                    if "exit" in answer:
+                        return
+
+                bot.message_history.add_user_message(answer)
+
+                if move_to_new_phase:
+                    break
+                bot.result[response] = answer
+        print("\nInterview concluded. Thank you for your time!")
+
+
+
 class InterviewBot:
     def __init__(self, cv_text, job_description,results):
         
@@ -71,7 +114,7 @@ class InterviewBot:
 
         return self.clean_text(response.content)
 
-    def conduct_interview(self):
+    def conduct_interview_inside(self):
         for stage in self.stages:
             print(f"\n--- {stage} STAGE ---")
             

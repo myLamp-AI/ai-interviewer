@@ -1,6 +1,5 @@
-Flask
-Flask-Cors
-pyaudio
+fastapi[standard]
+websockets
 SpeechRecognition 
 google-cloud-texttospeech  
 python-dotenv 
@@ -13,5 +12,6 @@ langchain_community
 langchain-google-genai
 gunicorn
 eventlet
+
 
 
