@@ -1,17 +1,10 @@
 fastapi[standard]
-websockets
-SpeechRecognition 
-google-cloud-texttospeech  
-python-dotenv 
-gTTS 
-pydub 
+uvicorn[standard]
 PyPDF2
-realtimetts[all]
 langchain
 langchain_community
 langchain-google-genai
-gunicorn
-eventlet
+
 
 
 
