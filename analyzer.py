@@ -5,6 +5,7 @@ from langchain_google_genai import ChatGoogleGenerativeAI
 import os
 import sys
 sys.path.append(os.path.dirname(os.path.abspath(__file__)))
+
 def analyze_results(results, llm):
     prompt = PromptTemplate(
         input_variables=["question", "answer"],
@@ -75,10 +76,3 @@ def analyze_results(results, llm):
     #     json.dump(analyzed_results, f, indent=2)
 
     return analyzed_results
-
-# import google.generativeai as genai
-# from langchain_google_genai import ChatGoogleGenerativeAI
-# genai.configure(api_key="AIzaSyAY8U8Asc0ccXyF2_EI2ctM1K6f422fUbY")
-# model = ChatGoogleGenerativeAI(model="gemini-pro",temperature=0.3,max_output_tokens=2048)
-
-# analyze_results({"introduce yourself":"I am anish kumar from uganda, i won't answer you"},model)
