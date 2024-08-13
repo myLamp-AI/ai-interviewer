@@ -8,6 +8,7 @@ from analyzer import *
 import google.generativeai as genai
 from langchain_google_genai import ChatGoogleGenerativeAI
 from langchain_core.prompts import ChatPromptTemplate
+import asyncio
 from langchain_core.runnables.history import RunnableWithMessageHistory
 from langchain_community.chat_message_histories import ChatMessageHistory
 #from RealtimeTTS import TextToAudioStream, GTTSEngine
@@ -19,8 +20,7 @@ sys.path.append(os.path.dirname(os.path.abspath(__file__)))
 load_dotenv()
 GOOGLE_API_KEY = os.getenv("GOOGLE_API_KEY")
 
-
-async def conduct_interview(interview_bot, websocket):
+async def conduct_interview(interview_bot, websocket,stop_interview):
     for stage in interview_bot.stages:
         print(f"\n--- {stage} STAGE ---")
         
@@ -30,7 +30,9 @@ async def conduct_interview(interview_bot, websocket):
         else:
             prompt = PROMPTS[stage].format(variable=interview_bot.cv_parts[stage])
 
-        while True:
+        while not stop_interview.is_set():
+            if stop_interview.is_set():
+                return
             response = interview_bot.get_ai_response(prompt, "Ask your question or exit the interview")
             
             next_phase = response.find("move to next phase")
@@ -48,9 +50,8 @@ async def conduct_interview(interview_bot, websocket):
             await websocket.send_json({'type': 'interview_question', 'question': response})
 
             print("Please speak your answer...")
-            answer = await websocket.receive_json()
-            answer = answer.get('answer', '')
-
+            answer_data = await websocket.receive_json()
+            answer = answer_data.get('answer', '')
             print("You:", answer)
             if answer:
                 if "exit" in answer:
@@ -61,6 +62,7 @@ async def conduct_interview(interview_bot, websocket):
             if move_to_new_phase:
                 break
             interview_bot.result[response] = answer
+            await asyncio.sleep(0.1)
             
     print("\nInterview concluded. Thank you for your time!")
     await websocket.send_json({'type': 'interview_end', 'message': 'Interview completed'}) 
@@ -73,51 +75,51 @@ async def conduct_interview(interview_bot, websocket):
 
 
 
-async def conduct_interview(interview_bot, websocket):
-    for stage in interview_bot.stages:
-        print(f"\n--- {stage} STAGE ---")
+# async def conduct_interview(interview_bot, websocket):
+#     for stage in interview_bot.stages:
+#         print(f"\n--- {stage} STAGE ---")
         
-        interview_bot.message_history = ChatMessageHistory()
-        if stage == "TECHNICAL":
-            prompt = PROMPTS[stage].format(skills=interview_bot.cv_parts[stage], job_description=interview_bot.job_description)
-        else:
-            prompt = PROMPTS[stage].format(variable=interview_bot.cv_parts[stage])
+#         interview_bot.message_history = ChatMessageHistory()
+#         if stage == "TECHNICAL":
+#             prompt = PROMPTS[stage].format(skills=interview_bot.cv_parts[stage], job_description=interview_bot.job_description)
+#         else:
+#             prompt = PROMPTS[stage].format(variable=interview_bot.cv_parts[stage])
 
-        while True:
-            response = interview_bot.get_ai_response(prompt, "Ask your question or exit the interview")
+#         while True:
+#             response = interview_bot.get_ai_response(prompt, "Ask your question or exit the interview")
             
-            next_phase = response.find("move to next phase")
-            if next_phase != -1:
-                response = response[:next_phase]
-                move_to_new_phase = True
-            else:
-                move_to_new_phase = False
-            if response:
-                if "exit" in response or "interview concluded" in response:
-                    break
+#             next_phase = response.find("move to next phase")
+#             if next_phase != -1:
+#                 response = response[:next_phase]
+#                 move_to_new_phase = True
+#             else:
+#                 move_to_new_phase = False
+#             if response:
+#                 if "exit" in response or "interview concluded" in response:
+#                     break
 
-            print("Interviewer:", response)
-            #interview_bot.text_to_speech(response)
-            await websocket.send_json({'type': 'interview_question', 'question': response})
+#             print("Interviewer:", response)
+#             #interview_bot.text_to_speech(response)
+#             await websocket.send_json({'type': 'interview_question', 'question': response})
 
-            print("Please speak your answer...")
-            answer = await websocket.receive_json()
-            answer = answer.get('answer', '')
+#             print("Please speak your answer...")
+#             answer = await websocket.receive_json()
+#             answer = answer.get('answer', '')
 
-            print("You:", answer)
-            if answer:
-                if "exit" in answer:
-                    return
+#             print("You:", answer)
+#             if answer:
+#                 if "exit" in answer:
+#                     return
 
-            interview_bot.message_history.add_user_message(answer)
+#             interview_bot.message_history.add_user_message(answer)
 
-            if move_to_new_phase:
-                break
-            interview_bot.result[response] = answer
+#             if move_to_new_phase:
+#                 break
+#             interview_bot.result[response] = answer
             
-    print("\nInterview concluded. Thank you for your time!")
-    await websocket.send_json({'type': 'interview_end', 'message': 'Interview completed'}) 
-    return
+#     print("\nInterview concluded. Thank you for your time!")
+#     await websocket.send_json({'type': 'interview_end', 'message': 'Interview completed'}) 
+#     return
 
 
 
@@ -136,6 +138,9 @@ class InterviewBot:
         self.model = ChatGoogleGenerativeAI(model="gemini-pro", temperature=0.3)
         self.cv_parts = get_resume_in_parts(self.model, cv_text)
         self.job_description = get_summarized_jd(self.model, job_description)
+        self.answer_event = asyncio.Event()
+        self.current_answer = None
+        self.stop_interview = asyncio.Event()
         # Initialize TTS engine
         # self.stream = stream
         
@@ -177,6 +182,57 @@ class InterviewBot:
         )
 
         return self.clean_text(response.content)
+    
+    async def conduct_interview(self, websocket):
+        for stage in self.stages:
+            print(f"\n--- {stage} STAGE ---")
+            
+            self.message_history = ChatMessageHistory()
+            if stage == "TECHNICAL":
+                prompt = PROMPTS[stage].format(skills=self.cv_parts[stage], job_description=self.job_description)
+            else:
+                prompt = PROMPTS[stage].format(variable=self.cv_parts[stage])
+
+            while True:
+                if self.stop_interview.is_set():
+                    return
+                response = self.get_ai_response(prompt, "Ask your question or exit the interview")
+                
+                next_phase = response.find("move to next phase")
+                if next_phase != -1:
+                    response = response[:next_phase]
+                    move_to_new_phase = True
+                else:
+                    move_to_new_phase = False
+                if response:
+                    if "exit" in response or "interview concluded" in response:
+                        break
+
+                print("Interviewer:", response)
+                #self.text_to_speech(response)
+                await websocket.send_json({'type': 'interview_question', 'question': response})
+
+                print("Please speak your answer...")
+                await self.answer_event.wait()
+                answer = self.current_answer
+                self.current_answer = None
+                self.answer_event.clear()
+                #answer = answer_data.get('answer', '')
+                print("You:", answer)
+                if answer:
+                    if "exit" in answer:
+                        return
+
+                self.message_history.add_user_message(answer)
+
+                if move_to_new_phase:
+                    break
+                self.result[response] = answer
+                await asyncio.sleep(0.1)
+                
+        print("\nInterview concluded. Thank you for your time!")
+        await websocket.send_json({'type': 'interview_end', 'message': 'Interview completed'}) 
+        return
 
     # def conduct_interview_inside(self):
     #     for stage in self.stages:
@@ -219,14 +275,14 @@ class InterviewBot:
     #     print("\nInterview concluded. Thank you for your time!")
 
 # Usage
-if __name__ == "__main__":
-    cv_path = "sample_cv_2.pdf"
-    cv_text =  read_cv(cv_path)
-    job_description = "Data Science and ML"
-    model = ChatGoogleGenerativeAI(model="gemini-pro",temperature=0.3,max_output_tokens=2048)
-    results = {}
-    bot = InterviewBot(cv_text, job_description,results)
-    bot.conduct_interview()
-    analyzed_results = analyze_results({"introduce yourself":"I am anish kumar from uganda, i won't answer you"},model)
-    save_analysis_results(analyzed_results)
+# if __name__ == "__main__":
+#     cv_path = "sample_cv_2.pdf"
+#     cv_text =  read_cv(cv_path)
+#     job_description = "Data Science and ML"
+#     model = ChatGoogleGenerativeAI(model="gemini-pro",temperature=0.3,max_output_tokens=2048)
+#     results = {}
+#     bot = InterviewBot(cv_text, job_description,results)
+#     bot.conduct_interview()
+#     analyzed_results = analyze_results({"introduce yourself":"I am anish kumar from uganda, i won't answer you"},model)
+#     save_analysis_results(analyzed_results)
 

@@ -4,6 +4,7 @@ PyPDF2
 langchain
 langchain_community
 langchain-google-genai
+asyncio
 
 
 
