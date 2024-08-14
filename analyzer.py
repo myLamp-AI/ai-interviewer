@@ -7,7 +7,6 @@ import sys
 sys.path.append(os.path.dirname(os.path.abspath(__file__)))
 
 def analyze_results(results, llm = None):
-    
     prompt = PromptTemplate(
         input_variables=["question", "answer"],
         template="""

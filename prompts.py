@@ -130,16 +130,30 @@ def get_summarized_jd(model, job_description):
 
 def get_resume_in_parts(model,resume):
     ASK_QUESTION_PART = """
-    ### RESUME DETAILS ###
+   ### RESUME DETAILS ###
     {resume}
 
     ### INSTRUCTION ###
-    I have provided you with my resume which i will give to the interviewer also, I want you to divide the resume in 4 different parts from where an interviewer can asks question.
-    The 4 Parts will be:
-    1. Introductory Questions of Interview
-    2. Project and Knowledge related question from INterview
-    3. Technical Skill related Question from INterview
-    4. Ending Question for INterview.
+    I have provided you with my resume, which I will also give to the interviewer. Please analyze it thoroughly and divide the content into 4 different parts that an interviewer might focus on. For each part, provide a summary of relevant resume content and suggest 3-5 potential interview questions.
+
+    The 4 parts are:
+
+    1. INTRODUCTION: 
+    - Focus on personal information, education, and career objectives.
+    - Include details like name, degree, university, and overall professional summary.
+
+    2. PROJECTS:
+    - Highlight key projects, their technologies, and your role.
+    - Emphasize achievements and impact of each project.
+
+    3. TECHNICAL SKILLS:
+    - List all technical skills mentioned in the resume.
+    - Group them by categories (e.g., programming languages, frameworks, tools).
+
+    4. OUTRO:
+    - Summarize any additional information like certifications, awards, or extracurricular activities.
+    - Include any other details that might be relevant for closing questions.
+
     You are allowed to summarize points if necessary.
     Read Resume 1000 times, think deeply and decide which part of resume will belong to which stage.
     The Expected OUtput is json string starting and ending with '```json' and '```' respectively with keys as "INTRODUCTION","PROJECT","TECHNICAL" and "OUTRO". The values should be string concating the parts of Resume for each keys.
