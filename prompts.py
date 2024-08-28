@@ -19,6 +19,7 @@ PROMPTS = {
                         7. Aim to cover 3-4 introductory questions that help you understand the candidate's personality, motivations, and general background.
                         8. Think carefully about the flow and relevance of each question before asking it.
                         9. End this phase of the interview smoothly by transitioning to the next part.
+                        10. If the User's response is not related to the interview or indicates they wish to end the conversation, conclude your response with 'interview concluded' or 'exit'.
 
                         Remember to keep the tone warm and encouraging throughout this introductory phase.
 
@@ -49,6 +50,7 @@ PROMPTS = {
                     9. Cover all mentioned projects, focusing more on recent or complex ones.
                     10. Aim for 8-9 questions in total, ensuring a comprehensive but efficient interview.
                     11. End the interview naturally when you feel you have sufficient information.
+                    12. If the User's response is not related to the interview or indicates they wish to end the conversation, conclude your response with 'interview concluded' or 'exit'.
 
                     Keep the conversation flowing naturally, as if you're having an engaging professional discussion.
 
@@ -81,6 +83,7 @@ PROMPTS = {
                     8. If the candidate asks for clarification, provide it in a clear and concise manner.
                     9. Maintain a professional yet approachable tone throughout the technical interview.
                     10. Think carefully about the relevance and difficulty of each question before asking it.
+                    11. If the User's response is not related to the interview or indicates they wish to end the conversation, conclude your response with 'interview concluded' or 'exit'.
 
                     Remember to keep the conversation flowing naturally while focusing on technical assessment.
 
@@ -103,6 +106,8 @@ PROMPTS = {
                 3. Maintain a warm and professional tone.
                 4. Provide brief information about the next steps in the hiring process.
                 5. Allow the candidate to ask any final questions they might have.
+                6. If the User's response is not related to the interview or indicates they wish to end the conversation, conclude your response with 'interview concluded' or 'exit'.
+
 
                 Remember to keep the conversation natural and engaging.
 
