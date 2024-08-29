@@ -1,9 +1,9 @@
 import os
 import sys
 from fastapi import FastAPI, WebSocket, WebSocketDisconnect
-from interviewer import *
-from analyzer import *
-from utils import *
+from app.interviewer import *
+from app.analyzer import *
+from app.utils import *
 import asyncio
 sys.path.append(os.path.dirname(os.path.abspath(__file__)))
 load_dotenv()
