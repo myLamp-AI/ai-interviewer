@@ -19,7 +19,8 @@ PROMPTS = {
                         7. Aim to cover 3-4 introductory questions that help you understand the candidate's personality, motivations, and general background.
                         8. Think carefully about the flow and relevance of each question before asking it.
                         9. End this phase of the interview smoothly by transitioning to the next part.
-                        10. If the User's response is not related to the interview or indicates they wish to end the conversation, conclude your response with 'interview concluded' or 'exit'.
+                        10. If the User's response is not related to the interview your response should be to ask him "To Stick To the Interview Questions.".
+                        11. If the User's response is not related to the interview or indicates they wish to end the conversation, conclude your response with 'interview concluded' or 'exit'.
 
                         Remember to keep the tone warm and encouraging throughout this introductory phase.
 
@@ -50,11 +51,12 @@ PROMPTS = {
                     9. Cover all mentioned projects, focusing more on recent or complex ones.
                     10. Aim for 8-9 questions in total, ensuring a comprehensive but efficient interview.
                     11. End the interview naturally when you feel you have sufficient information.
-                    12. If the User's response is not related to the interview or indicates they wish to end the conversation, conclude your response with 'interview concluded' or 'exit'.
+                    12. If the User's response is not related to the interview your response should be to ask him "To Stick To the Interview Questions.".
+                    13. If the User's response indicates they wish to end the conversation, your response with 'interview concluded' or 'exit'.
 
                     Keep the conversation flowing naturally, as if you're having an engaging professional discussion.
 
-                    Your responses should be in lowercase, reflecting natural speech. Include your next question or comment as Sarah would say it. If you're ready to conclude this part, end with 'move to next phase'.
+                    Your responses should be in lowercase, reflecting natural speech. Include your next question or comment as Sarah would say it. If you're ready to conclude this part, end with 'move to coding phase'.
 
                     Example start:
                     "alright, let's dive into your project experience. i see you worked on [project name]. could you give me an overview of your role in that project?"
@@ -117,6 +119,21 @@ PROMPTS = {
                 "we're coming to the end of our interview, and i want to thank you for sharing your experiences with me. before we wrap up, i have a couple of final questions for you."
 """
 }
+
+def evaluate_code(model,question,code):
+    CODE_EVALUATION_PROMPT = """You will be provided with a programming question and code
+     You need to judge the code if it is really the answer to the question or not.
+     You need to return boolean value either "True" or "False" based on whether the code is right or not.
+     ### QUESTION
+     {question}
+     ### CODE
+     {code}
+     ### OUTPUT
+     The output must be either "True" or "False".
+       """.strip()
+    code_evaluation_prompt = CODE_EVALUATION_PROMPT.format(question=question,code=code)
+    code_evaluation_result = model.invoke(code_evaluation_prompt)
+    return code_evaluation_result.content
 
 def get_summarized_jd(model, job_description):
     SUMMARIZE_JOB_DESCRIPTION_PROMPT = """

@@ -34,12 +34,14 @@
     <input type="text" id="answerInput" placeholder="Type your answer here">
     <button id="sendAnswerButton">Send Answer</button>
     <button id="endInterviewButton">End Interview</button>
+    <button id="CodeSendButton">CODE Interview</button>
     <button id="getAnalysisButton">Get Analysis</button>
 
     <script>
-        const socket = new WebSocket('https://ai-interviewer-c476.onrender.com/ws');
+        const socket = new WebSocket('ws://localhost:8000/ws');
         let cvText = '';
         let JD = '';
+        let que = '';
         
         socket.onmessage = function(event) {
             const data = JSON.parse(event.data);
@@ -53,7 +55,17 @@
                 appendToChatBox('Interviewer: ' + data.question);
             } else if (data.type === 'interview_end') {
                 appendToChatBox('System: ' + data.message);
-            } else if (data.type === 'analysis') {
+            }else if (data.type=== 'coding_question') {
+                appendToChatBox("STARTED INTERVIEW")
+                appendToChatBox('System: ' + data.message);
+                que = data.message
+            }
+            else if (data.type=== 'code_evaluation') {
+                appendToChatBox("STARTED EVALUATED")
+                appendToChatBox('System: ' + data.result);
+                que = data.message
+            }
+            else if (data.type === 'analysis') {
                 appendToChatBox('Analysis: ' + JSON.stringify(data.result));
             }
         };
@@ -106,6 +118,7 @@
             }));
             document.getElementById('status').innerText = 'Interview started!';
         });
+    
 
         document.getElementById('sendAnswerButton').addEventListener('click', () => {
             const answer = document.getElementById('answerInput').value;
@@ -114,6 +127,19 @@
                 socket.send(JSON.stringify({
                     type: 'answer',
                     answer: answer
+                }));
+                document.getElementById('answerInput').value = '';
+            }
+        });
+
+        document.getElementById('CodeSendButton').addEventListener('click', () => {
+            const answer = document.getElementById('answerInput').value;
+            if (answer) {
+                appendToChatBox('You: ' + answer);
+                socket.send(JSON.stringify({
+                    type: 'coding',
+                    ques : que,
+                    code: answer
                 }));
                 document.getElementById('answerInput').value = '';
             }

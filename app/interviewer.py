@@ -12,9 +12,15 @@ import asyncio
 from langchain_core.runnables.history import RunnableWithMessageHistory
 from langchain_community.chat_message_histories import ChatMessageHistory
 sys.path.append(os.path.dirname(os.path.abspath(__file__)))
-
+import random
 load_dotenv()
 GOOGLE_API_KEY = os.getenv("GOOGLE_API_KEY")
+
+async def start_coding_phase():
+    pass
+    
+
+
 
 async def conduct_interview(interview_bot, websocket,stop_interview):
     for stage in interview_bot.stages:
@@ -32,9 +38,12 @@ async def conduct_interview(interview_bot, websocket,stop_interview):
             response = interview_bot.get_ai_response(prompt, "Ask your question or exit the interview")
             
             next_phase = response.find("move to next phase")
+            coding_phase = response.find("coding phase")
             if next_phase != -1:
                 response = response[:next_phase]
                 move_to_new_phase = True
+            elif coding_phase != -1:
+                pass
             else:
                 move_to_new_phase = False
             if response:
@@ -57,6 +66,10 @@ async def conduct_interview(interview_bot, websocket,stop_interview):
 
             if move_to_new_phase:
                 break
+            if coding_phase:
+                await websocket.send_json({"type":"start_coding",'message':'Starting Coding related Questions'})
+                await start_coding_phase()
+                break
             interview_bot.result[response] = answer
             await asyncio.sleep(0.1)
             
@@ -68,11 +81,11 @@ async def conduct_interview(interview_bot, websocket,stop_interview):
 
 class InterviewBot:
     def __init__(self, cv_text, job_description,results):
-        
-        self.stages = ["INTRODUCTION", "PROJECT", "TECHNICAL", "OUTRO"]
+        #self.stages = ["CODING", "TECHNICAL", "OUTRO"]
+        self.stages = ["INTRODUCTION", "PROJECT", "CODING", "TECHNICAL", "OUTRO"]
         self.message_history = ChatMessageHistory()
         self.result = results
-        # Initialize Google Generative AI
+        # Initialize Google Generative AIs
         genai.configure(api_key=GOOGLE_API_KEY)
         self.model = ChatGoogleGenerativeAI(model="gemini-pro", temperature=0.3)
         self.cv_parts = get_resume_in_parts(self.model, cv_text)
@@ -80,6 +93,7 @@ class InterviewBot:
         self.answer_event = asyncio.Event()
         self.current_answer = None
         self.stop_interview = asyncio.Event()
+        self.coding_event = asyncio.Event()
         # Initialize TTS engine
         # self.stream = stream
         
@@ -113,6 +127,15 @@ class InterviewBot:
 
         return self.clean_text(response.content)
     
+    async def start_coding_stage(self,websocket):
+        print("CODING INTERVIEW IS HERE")
+        q1 = random.choice(["Print Hello World","Print Hello Anish","Print Hello Duniya"])
+        await websocket.send_json({'type': 'coding_question', 'message': q1})
+        print(self.coding_event.is_set())
+        await self.coding_event.wait()
+        self.coding_event.clear()
+        return
+    
     async def conduct_interview(self, websocket):
         for stage in self.stages:
             print(f"\n--- {stage} STAGE ---")
@@ -120,6 +143,11 @@ class InterviewBot:
                 self.message_history = ChatMessageHistory()
                 if stage == "TECHNICAL":
                     prompt = PROMPTS[stage].format(skills=self.cv_parts[stage], job_description=self.job_description)
+                elif stage == "CODING":
+                    print("I AM HERE")
+                    for i in range(2):
+                        await self.start_coding_stage(websocket=websocket)
+                    continue
                 else:
                     prompt = PROMPTS[stage].format(variable=self.cv_parts[stage])
 
@@ -159,7 +187,8 @@ class InterviewBot:
                         break
                     self.result[response] = answer
                     await asyncio.sleep(0.1)
-            except:
+            except Exception as e:
+                print(e)
                 await websocket.send_json({'type': 'interview_end', 'message': 'Interview completed Because of not a good job description'})
                 break 
                 
