@@ -1,6 +1,6 @@
 import sys
 import os
-
+import json
 sys.path.append(os.path.dirname(os.path.abspath(__file__)))
 
 PROMPTS = {
@@ -121,19 +121,47 @@ PROMPTS = {
 }
 
 def evaluate_code(model,question,code):
-    CODE_EVALUATION_PROMPT = """You will be provided with a programming question and code
-     You need to judge the code if it is really the answer to the question or not.
-     You need to return boolean value either "True" or "False" based on whether the code is right or not.
-     ### QUESTION
-     {question}
-     ### CODE
-     {code}
-     ### OUTPUT
-     The output must be either "True" or "False".
+    CODE_EVALUATION_PROMPT = """You are an expert programming evaluator. Your task is to assess whether a given code snippet correctly answers a programming question. Follow these steps:
+
+    1. Read the question carefully.
+    2. Analyze the provided code thoroughly.
+    3. Consider the following aspects:
+    - Does the code solve the problem stated in the question?
+    - Is the algorithm correct and efficient?
+    - Are there any syntax errors or logical flaws?
+    - Does it handle edge cases and potential errors?
+    - Is it well-structured and following good coding practices?
+
+    4. Think through the code execution step by step.
+    5. Determine if the code is a correct answer to the question.
+
+    ### QUESTION
+    {question}
+
+    ### CODE
+    {code}
+
+    ### OUTPUT
+    Ensure your response begins with "```json" and ends with "```" to properly format the JSON output.
+    Provide the final JSON object in this format:
+    
+    ```json {{
+        "RESULT": [True/False],
+        "RATIONALE": [Brief explanation of your reasoning]
+    }}```
+s
+    Note: 
+    - 'True' means the code correctly answers the question.
+    - 'False' means the code does not correctly answer the question.
+    - Your rationale should be concise but informative, highlighting key points that led to your decision. Refrain from sharing the correct code.
        """.strip()
     code_evaluation_prompt = CODE_EVALUATION_PROMPT.format(question=question,code=code)
     code_evaluation_result = model.invoke(code_evaluation_prompt)
-    return code_evaluation_result.content
+    content = code_evaluation_result.content
+    print(content)
+    content = json.loads(content.strip().strip('```json').strip('```'))
+    return content
+    
 
 def get_summarized_jd(model, job_description):
     SUMMARIZE_JOB_DESCRIPTION_PROMPT = """

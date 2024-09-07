@@ -4,8 +4,10 @@ from fastapi import FastAPI, WebSocket, WebSocketDisconnect
 from app.interviewer import *
 from app.analyzer import *
 from app.utils import *
+from prompts import evaluate_code
 import asyncio
 import logging
+import json
 sys.path.append(os.path.dirname(os.path.abspath(__file__)))
 load_dotenv()
 GOOGLE_API_KEY = os.getenv("GOOGLE_API_KEY")
@@ -21,7 +23,7 @@ class InterviewState:
         self.cv_text = ""
         self.job_description = ""
         self.interview_bot = None
-        self.results = {}
+        self.results = {"INTRODUCTION":{},"PROJECT":{},"CODING":{},"TECHNICAL":{},"OUTRO":{}}
         self.stop_interview = asyncio.Event()
 
 # WebSocket endpoint
@@ -86,7 +88,7 @@ async def handle_start_interview(websocket, state, handle_interview):
     if not state.interview_bot:
         state.interview_bot = InterviewBot(state.cv_text, state.job_description, state.results)
         asyncio.create_task(handle_interview())
-        await websocket.send_json({"type": "ack", "message": "Interview started"})
+        await websocket.send_json({"type": "interview_started", "message": "Interview started"})
 
 async def handle_answer(data, state):
     if state.interview_bot:
@@ -104,11 +106,10 @@ async def handle_coding(data, websocket, state, llm):
                 print(code,ques)
                 resp = evaluate_code(llm,ques,code)
                 print(code,ques)
+                print(resp)
                 await websocket.send_json({"type": "code_evaluation", "result": resp})
-                if resp == True or 'True':
-                    print(code,ques)
+                if resp["RESULT"] == True:
                     state.interview_bot.coding_event.set()
-                    print(code,ques)
     except Exception as e:
         print(e)
 
@@ -117,7 +118,7 @@ async def handle_end_interview(websocket, state):
         state.interview_bot.stop_interview.set()
         await asyncio.sleep(0.1)  # Allow time for interview task to react
         state.interview_bot.stop_interview.clear()
-        await websocket.send_json({"type": "ack", "message": "Interview ended"})
+        await websocket.send_json({"type": "interview_end", "message": "Interview ended"})
     logging.info("Interview concluded")
 
 

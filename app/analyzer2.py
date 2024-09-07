@@ -8,12 +8,12 @@ sys.path.append(os.path.dirname(os.path.abspath(__file__)))
 import time
 def analyze_results(results, llm = None):
     prompt = PromptTemplate(
-        input_variables=["question", "answer"],
+        input_variables=["qa_pairs"],
         template="""
         As an expert HR interviewer, provide a detailed, line-by-line analysis of the candidate's answer. Judge each line strictly on multiple metrics, providing scores and thorough reasoning for each score. 
 
-        Question: {question}
-        Candidate's Answer: {answer}
+        Questions and Answers:
+        {qa_pairs}
 
         For each line of the answer, provide the following:
         1. Relevance Score (0-10): How relevant is this line to the question asked?
@@ -51,23 +51,35 @@ def analyze_results(results, llm = None):
         }}
         """
     )
-    chain = LLMChain(llm=llm, prompt=prompt)
+    chain = LLMChain(llm=llm,prompt=prompt)
     analyzed_results = []
-    for question,answer in results.items():
-        analysis = chain.invoke({'question':question, 'answer':answer})
+    for stage, item in results.items():
+        qa_pairs = "\n\n".join([f"Question: {q}\nAnswer: {a}" for q, a in item.items()])
+        analysis = chain.invoke({'qa_pairs': qa_pairs})
         print(analysis)
         analysis = str(analysis['text'].strip().strip('```json').strip('```'))
         print(analysis)
-        time.sleep(1)
+        time.sleep(2)
         try:
             analysis_json = json.loads(analysis)
             analyzed_results.append({
-                "question": question,
-                "answer": answer,
+                "stage": stage,
                 "analysis": analysis_json
             })
         except json.JSONDecodeError:
-            print(f"Error decoding JSON for question: {question}")
+            print(f"Error decoding JSON for question: {stage}")
             print("Raw analysis:", analysis)
 
     return analyzed_results
+
+# Example usage
+if __name__ == "__main__":
+    llm = ChatGoogleGenerativeAI(model="gemini-pro",api_key="AIzaSyAY8U8Asc0ccXyF2_EI2ctM1K6f422fUbY",max_output_tokens=2048)
+    results = {"TECHNICAL":
+               {
+        "What is your greatest strength?": "I believe my greatest strength is my ability to quickly adapt to new situations and learn new skills.",
+        "How do you handle stress?": "I manage stress by prioritizing tasks, maintaining a healthy work-life balance, and practicing mindfulness techniques."
+        }
+    }
+    analyzed_results = analyze_results(results, llm)
+    print(json.dumps(analyzed_results, indent=2))
