@@ -2,9 +2,9 @@ import os
 import re
 import sys
 from dotenv import load_dotenv
-from app.utils import*
-from app.prompts import *
-from app.analyzer import *
+from utils import*
+from prompts import *
+from analyzer import *
 import google.generativeai as genai
 from langchain_google_genai import ChatGoogleGenerativeAI
 from langchain_core.prompts import ChatPromptTemplate
@@ -20,6 +20,7 @@ GOOGLE_API_KEY = os.getenv("GOOGLE_API_KEY")
 class InterviewBot:
     def __init__(self, cv_text, job_description, results):
         #self.stages = ["CODING", "TECHNICAL", "OUTRO"]
+        #self.stages = [ "PROJECT", "CODING", "TECHNICAL", "OUTRO"]
         self.stages = ["INTRODUCTION", "PROJECT", "CODING", "TECHNICAL", "OUTRO"]
         self.message_history = ChatMessageHistory()
         self.result = results
@@ -84,6 +85,7 @@ class InterviewBot:
             await websocket.send_json({'type': 'coding_error', 'message': f'Error in coding stage: {str(e)}'})
 
     async def conduct_interview(self, websocket):
+        prompt = ""
         for stage in self.stages:
             print(f"\n--- {stage} STAGE ---")
             try:
@@ -96,15 +98,18 @@ class InterviewBot:
                     await websocket.send_json({'type': 'coding_ended', 'message': "The End of Coding Round"})
                     continue
                 else:
-                    prompt = PROMPTS[stage].format(variable=self.cv_parts[stage])
-
+                    try:
+                        prompt = PROMPTS[stage].format(variable=self.cv_parts[stage])
+                        print(prompt)
+                    except Exception as e:
+                        print(e)
                 while True:
                     if self.stop_interview.is_set():
                         return
 
                     response = self.get_ai_response(prompt, "Ask your question or exit the interview")
                     
-                    next_phase = response.find("move to next phase")
+                    next_phase = response.find("next phase")
                     if next_phase != -1:
                         response = response[:next_phase]
                         move_to_new_phase = True
@@ -135,7 +140,8 @@ class InterviewBot:
 
                     if move_to_new_phase:
                         break
-                    self.result[stage][response] = answer
+                    if stage != "CODING":
+                        self.result[stage][response] = answer
                     await asyncio.sleep(0.1)
 
             except Exception as e:

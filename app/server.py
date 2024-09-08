@@ -1,9 +1,9 @@
 import os
 import sys
 from fastapi import FastAPI, WebSocket, WebSocketDisconnect
-from app.interviewer import *
-from app.analyzer import *
-from app.utils import *
+from interviewer import *
+from analyzer import *
+from utils import *
 from prompts import evaluate_code
 import asyncio
 import logging
@@ -73,9 +73,11 @@ async def handle_event(data, websocket, state, llm, handle_interview):
     elif data['type'] == 'end_interview':
         await handle_end_interview(websocket, state)
     elif data['type'] == 'get_analysis':
+        await handle_summary_analysis(websocket, state, llm)
         await handle_get_analysis(websocket, state, llm)
     elif data['type'] == 'get_summary_analysis':
         await handle_summary_analysis(websocket, state, llm)
+        
 
 async def handle_summary_analysis(websocket, state, llm):
     analyzed_result = analyze_results(state.results, llm)
