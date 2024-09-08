@@ -2,9 +2,9 @@ import os
 import re
 import sys
 from dotenv import load_dotenv
-from app.utils import*
-from app.prompts import *
-from app.analyzer import *
+from utils import*
+from prompts import *
+from analyzer import *
 import google.generativeai as genai
 from langchain_google_genai import ChatGoogleGenerativeAI
 from langchain_core.prompts import ChatPromptTemplate
@@ -93,6 +93,7 @@ class InterviewBot:
                 elif stage == "CODING":
                     for i in range(2):
                         await self.start_coding_stage(websocket=websocket)
+                    await websocket.send_json({'type': 'coding_ended', 'message': "The End of Coding Round"})
                     continue
                 else:
                     prompt = PROMPTS[stage].format(variable=self.cv_parts[stage])
