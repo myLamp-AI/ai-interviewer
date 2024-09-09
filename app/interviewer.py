@@ -119,6 +119,8 @@ class InterviewBot:
                     if response:
                         if "exit" in response or "interview concluded" in response:
                             break
+                    if not response:
+                        break
 
                     print("Interviewer:", response)
                     await websocket.send_json({'type': 'interview_question', 'question': response})

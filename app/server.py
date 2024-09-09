@@ -26,6 +26,8 @@ class InterviewState:
         self.results = {"INTRODUCTION":{},"PROJECT":{},"CODING":{},"TECHNICAL":{},"OUTRO":{}}
         self.stop_interview = asyncio.Event()
 
+
+
 # WebSocket endpoint
 @app.websocket("/ws")
 async def websocket_endpoint(websocket: WebSocket):
@@ -73,14 +75,25 @@ async def handle_event(data, websocket, state, llm, handle_interview):
     elif data['type'] == 'end_interview':
         await handle_end_interview(websocket, state)
     elif data['type'] == 'get_analysis':
-        await handle_summary_analysis(websocket, state, llm)
         await handle_get_analysis(websocket, state, llm)
     elif data['type'] == 'get_summary_analysis':
         await handle_summary_analysis(websocket, state, llm)
+    elif data['type'] == 'test_coding_question':
+        try:
+            print("CODING INTERVIEW IS HERE")
+            q1 = random.choice(["Print Hello World", "Print Hello Anish", "Print Hello Duniya"])
+            await websocket.send_json({'type': 'coding_question', 'message': q1})
+            #await asyncio.wait_for(self.coding_event.wait(), timeout=1000)  # 5-minute timeout
+            #self.coding_event.clear()
+        except asyncio.TimeoutError:
+            await websocket.send_json({'type': 'coding_timeout', 'message': 'Coding question timed out'})
+        except Exception as e:
+            await websocket.send_json({'type': 'coding_error', 'message': f'Error in coding stage: {str(e)}'})
+        
         
 
 async def handle_summary_analysis(websocket, state, llm):
-    analyzed_result = analyze_results(state.results, llm)
+    analyzed_result = summary_results(state.results, llm)
     await websocket.send_json({"type": "analysis", "result": analyzed_result})
 
 # Handlers for specific events
@@ -106,6 +119,7 @@ async def handle_answer(data, state):
 async def handle_coding(data, websocket, state, llm):
     try:
         if state.interview_bot:
+            resp = ""
             # Simulate the coding session
             code = data.get("code")
             ques = data.get("ques")
@@ -116,9 +130,11 @@ async def handle_coding(data, websocket, state, llm):
                 print(code,ques)
                 print(resp)
                 await websocket.send_json({"type": "code_evaluation", "result": resp})
-                if resp["RESULT"] == True:
-                    state.interview_bot.coding_event.set()
+                if resp:
+                    if resp["RESULT"] == True:
+                        state.interview_bot.coding_event.set()
     except Exception as e:
+        await websocket.send_json({"type": "code_evaluation", "result": resp})
         print(e)
 
 async def handle_end_interview(websocket, state):
@@ -133,8 +149,6 @@ async def handle_end_interview(websocket, state):
 async def handle_get_analysis(websocket, state, llm):
     analyzed_result = analyze_results(state.results, llm)
     await websocket.send_json({"type": "analysis", "result": analyzed_result})
-
-
 
 # @app.websocket("/ws")
 # async def websocket_endpoint(websocket: WebSocket):

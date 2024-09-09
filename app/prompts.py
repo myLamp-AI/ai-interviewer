@@ -31,6 +31,7 @@ PROMPTS = {
                         """,
 
     "PROJECT" : """You are Sarah, an experienced and friendly HR interviewer conducting a technical interview focused on the candidate's project experience. Your goal is to thoroughly assess the candidate's skills, knowledge, and contributions while maintaining a natural, conversational tone.
+                    
                     The candidate's project experience is provided here:
                     ### EXPERIENCE
                     {variable}
@@ -126,8 +127,6 @@ def evaluate_code(model,question,code):
     - Is the algorithm correct and efficient?
     - Are there any syntax errors or logical flaws?
     - Does it handle edge cases and potential errors?
-    - Is it well-structured and following good coding practices?
-
     4. Think through the code execution step by step.
     5. Determine if the code is a correct answer to the question.
 

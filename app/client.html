@@ -37,6 +37,7 @@
     <button id="CodeSendButton">CODE Interview</button>
     <button id="getAnalysisButton">Get Analysis</button>
     <button id="getSummaryAnalysis">Get Summary</button>
+    <button id="testCodingQuestion">Test Question</button>
 
     <script>
         const socket = new WebSocket('ws://localhost:8000/ws');
@@ -160,6 +161,12 @@
         document.getElementById('getSummaryAnalysis').addEventListener('click', () => {
             socket.send(JSON.stringify({
                 type: 'get_summary_analysis'
+            }));
+        });
+
+        document.getElementById('testCodingQuestion').addEventListener('click', () => {
+            socket.send(JSON.stringify({
+                type: 'test_coding_question'
             }));
         });
     </script>
