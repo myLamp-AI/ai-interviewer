@@ -81,8 +81,8 @@ async def handle_event(data, websocket, state, llm, handle_interview):
     elif data['type'] == 'test_coding_question':
         try:
             print("CODING INTERVIEW IS HERE")
-            q1 = random.choice(["Print Hello World", "Print Hello Anish", "Print Hello Duniya"])
-            await websocket.send_json({'type': 'coding_question', 'message': q1})
+            q1 = random.choice(["Q1. Print Hello World", "Q2. Print Hello Anish", "Q3. Print Hello Duniya"])
+            await websocket.send_json({'type': 'test_coding_question', 'message': q1})
             #await asyncio.wait_for(self.coding_event.wait(), timeout=1000)  # 5-minute timeout
             #self.coding_event.clear()
         except asyncio.TimeoutError:
