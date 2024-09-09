@@ -2,9 +2,9 @@ import os
 import re
 import sys
 from dotenv import load_dotenv
-from utils import*
-from prompts import *
-from analyzer import *
+from app.utils import*
+from app.prompts import *
+from app.analyzer import *
 import google.generativeai as genai
 from langchain_google_genai import ChatGoogleGenerativeAI
 from langchain_core.prompts import ChatPromptTemplate

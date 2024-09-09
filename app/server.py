@@ -1,10 +1,10 @@
 import os
 import sys
 from fastapi import FastAPI, WebSocket, WebSocketDisconnect
-from interviewer import *
-from analyzer import *
-from utils import *
-from prompts import evaluate_code
+from app.interviewer import *
+from app.analyzer import *
+from app.utils import *
+from app.prompts import evaluate_code
 import asyncio
 import logging
 import json
