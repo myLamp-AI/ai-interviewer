@@ -34,7 +34,7 @@
     <input type="text" id="answerInput" placeholder="Type your answer here">
     <button id="sendAnswerButton">Send Answer</button>
     <button id="endInterviewButton">End Interview</button>
-    <button id="CodeSendButton">CODE Interview</button>
+    <button id="CodeSendButton">Send Coding Answers</button>
     <button id="getAnalysisButton">Get Analysis</button>
     <button id="getSummaryAnalysis">Get Summary</button>
     <button id="testCodingQuestion">Test Question</button>
@@ -63,9 +63,17 @@
                 que = data.message
             }
             else if (data.type=== 'code_evaluation') {
-                appendToChatBox("STARTED EVALUATED")
-                appendToChatBox('System: ' + data.result);
-                que = data.message
+                //appendToChatBox("STARTED EVALUATED")
+                let result = data.result
+                if(result){
+                    if ( data.result["RESULT"]){
+                        appendToChatBox('Good This is Correct ');
+                    }else{
+                        appendToChatBox('Try Again Please, You Have Got it wrong');
+                    }
+                }else{
+                    appendToChatBox('Error Receiving Results Send Again');
+                }
             }
             else if (data.type === 'analysis') {
                 appendToChatBox('Analysis: ' + JSON.stringify(data.result));

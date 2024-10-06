@@ -1,10 +1,10 @@
 import os
 import sys
 from fastapi import FastAPI, WebSocket, WebSocketDisconnect
-from app.interviewer import *
-from app.analyzer import *
-from app.utils import *
-from app.prompts import evaluate_code
+from interviewer import *
+from analyzer import *
+from utils import *
+from prompts import evaluate_code
 import asyncio
 import logging
 import json
@@ -131,7 +131,7 @@ async def handle_coding(data, websocket, state, llm):
                 print(resp)
                 await websocket.send_json({"type": "code_evaluation", "result": resp})
                 if resp:
-                    if resp["RESULT"] == True:
+                    if resp["RESULT"]==True:
                         state.interview_bot.coding_event.set()
     except Exception as e:
         await websocket.send_json({"type": "code_evaluation", "result": resp})

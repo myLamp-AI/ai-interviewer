@@ -1,6 +1,10 @@
 import sys
 import os
 import json
+from langchain.output_parsers import ResponseSchema, StructuredOutputParser
+from langchain_core.prompts import PromptTemplate
+from langchain.schema.output_parser import StrOutputParser
+import re
 sys.path.append(os.path.dirname(os.path.abspath(__file__)))
 
 PROMPTS = {
@@ -34,7 +38,7 @@ PROMPTS = {
                     
                     The candidate's project experience is provided here:
                     ### EXPERIENCE
-                    {variable}
+                    "{variable}"
 
                     ### GUIDELINES
                     1. Ask one question at a time, using a conversational tone. Add brief comments or acknowledgments to maintain flow.
@@ -136,27 +140,57 @@ def evaluate_code(model,question,code):
     ### CODE
     {code}
 
-    ### OUTPUT
-    Ensure your response begins with "```json" and ends with "```" to properly format the JSON output.
-    Provide the final JSON object in this format:
+    ### OUPTUT
+    Provide the boolean output with True if The Code is Correct else False
+    The output should be a markdown code snippet formatted in the following schema, including the leading and trailing "```json" and "```":
+
+      ```json
+      {{
+         "RESULT": bool
+      }}
+      ```
     
-    ```json {{
-        "RESULT": [True/False],
-        "RATIONALE": [Brief explanation of your reasoning]
-    }}```
-s
-    Note: 
-    - 'True' means the code correctly answers the question.
-    - 'False' means the code does not correctly answer the question.
-    - Your rationale should be concise but informative, highlighting key points that led to your decision. Refrain from sharing the correct code.
        """.strip()
-    code_evaluation_prompt = CODE_EVALUATION_PROMPT.format(question=question,code=code)
-    code_evaluation_result = model.invoke(code_evaluation_prompt)
-    content = code_evaluation_result.content
-    print(content)
-    content = json.loads(content.strip().strip('```json').strip('```'))
-    return content
+    response_schemas = [
+    ResponseSchema(name="RESULT", description="",type="bool"),
+    ]
+    output_parser = StructuredOutputParser.from_response_schemas(response_schemas)
+    format_instructions = output_parser.get_format_instructions()
+    prompt = PromptTemplate(
+    template=CODE_EVALUATION_PROMPT,
+    input_variables=["question","code"],
+    #partial_variables={"format_instructions": format_instructions},
+    )
+    chain = prompt | model | StrOutputParser()
+    try:
+        # Get the raw output from the model
+        raw_output = chain.invoke({"question": question, "code": code})
+
+        # Clean the output: extract JSON string from markdown code block
+        json_match = re.search(r'```json\s*(.*?)\s*```', raw_output, re.DOTALL)
+        if json_match:
+            cleaned_output = json_match.group(1)
+        else:
+            raise ValueError("No JSON block found in the output")
+
+        # Parse the cleaned output
+        parsed_output = json.loads(cleaned_output)
+        
+        # Validate the structure
+        if "RESULT" not in parsed_output or not isinstance(parsed_output["RESULT"], bool):
+            raise ValueError("Invalid output structure")
+
+        return parsed_output
+
+    except Exception as e:
+        print(f"Error parsing output: {e}")
+        print(f"Raw output: {raw_output}")
+        
+        # Fallback: simple boolean extraction
+        return {"RESULT": "true" in raw_output.lower() or "correct" in raw_output.lower()}
     
+
+
 
 def get_summarized_jd(model, job_description):
     SUMMARIZE_JOB_DESCRIPTION_PROMPT = """
@@ -166,7 +200,6 @@ def get_summarized_jd(model, job_description):
     ### INSTRUCTION ###
     Provided the job Description Summarize the Job Description WIthing 150 Words, capturing the important Skills and points on which questions can be asked in interview.
     The Expected Output is all lowercase string without any special character
-
     """.strip()
 
     jd_summarization_prompt = SUMMARIZE_JOB_DESCRIPTION_PROMPT.format(job_des=job_description)

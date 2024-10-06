@@ -2,9 +2,9 @@ import os
 import re
 import sys
 from dotenv import load_dotenv
-from app.utils import*
-from app.prompts import *
-from app.analyzer import *
+from utils import*
+from prompts import *
+from analyzer import *
 import google.generativeai as genai
 from langchain_google_genai import ChatGoogleGenerativeAI
 from langchain_core.prompts import ChatPromptTemplate
@@ -75,7 +75,7 @@ class InterviewBot:
     async def start_coding_stage(self, websocket):
         try:
             print("CODING INTERVIEW IS HERE")
-            q1 = random.choice(["Print Hello World", "Print Hello Anish", "Print Hello Duniya"])
+            q1 = random.choice(["Write a python code to Print Hello World", "Write a python code to Print Hello Anish", "Write a python code to Print Hello Duniya"])
             await websocket.send_json({'type': 'coding_question', 'message': q1})
             await asyncio.wait_for(self.coding_event.wait(), timeout=1000)  # 5-minute timeout
             self.coding_event.clear()
@@ -99,10 +99,12 @@ class InterviewBot:
                     continue
                 else:
                     try:
-                        prompt = PROMPTS[stage].format(variable=self.cv_parts[stage])
+                        cleaned_text = self.cv_parts[stage].replace("{", "").replace("}", "")
+                        prompt = PROMPTS[stage].format(variable=cleaned_text)
                         print(prompt)
                     except Exception as e:
                         print(e)
+
                 while True:
                     if self.stop_interview.is_set():
                         return
