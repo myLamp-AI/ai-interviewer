@@ -1,10 +1,10 @@
 import os
 import sys
 from fastapi import FastAPI, WebSocket, WebSocketDisconnect
-from interviewer import *
-from analyzer import *
-from utils import *
-from prompts import evaluate_code
+from app.interviewer import *
+from app.analyzer import *
+from app.utils import *
+from app.prompts import evaluate_code
 import asyncio
 import logging
 import json
@@ -200,4 +200,4 @@ async def handle_get_analysis(websocket, state, llm):
 
 if __name__ == "__main__":
     import uvicorn
-    uvicorn.run(app, port=8000)
+    uvicorn.run(app,port=8000)
