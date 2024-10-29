@@ -131,28 +131,28 @@ def summary_results(results,llm):
         json.dump(analyzed_results, f, indent=2)
     return analyzed_results
 
-from langchain_google_genai import ChatGoogleGenerativeAI
-import google.generativeai as genai
-import os
+# from langchain_google_genai import ChatGoogleGenerativeAI
+# import google.generativeai as genai
+# import os
 
-llm = ChatGoogleGenerativeAI(model="gemini-pro", temperature=0.3,api_key="AIzaSyAY8U8Asc0ccXyF2_EI2ctM1K6f422fUbY")
-if __name__ == "__main__":
-    result = {
-    "INTRODUCTION": {
-        "Interview Question": "Tell me about yourself.",
-        "Expected Answer": "I am a [Your Profession] with [Number] years of experience in [Industry]. I am passionate about [Your Interests] and enjoy working on [Your Projects]. I am particularly interested in this opportunity because [Reason for Interest]."
-    },
-    "PROJECT": {
-        "Interview Question": "Can you describe a challenging project you've worked on?",
-        "Expected Answer": "One of the most challenging projects I worked on was [Project Name]. The project involved [Project Description]. I faced [Challenges] but was able to overcome them by [Solutions]. The project was successful because [Positive Outcomes]."
-    },
-    "TECHNICAL": {
-        "Interview Question": "What are your technical skills and experience?",
-        "Expected Answer": "I have strong technical skills in [Technical Skills]. I have experience with [Technologies or Tools]. I have worked on projects involving [Projects or Applications]."
-    },
-    "OUTRO": {
-        "Interview Question": "Do you have any questions for us?",
-        "Expected Answer": "Yes, I have a few questions. First, could you tell me more about the team I would be working with? Second, what is the company's vision for the future? Finally, what are the opportunities for growth and development within the company?"
-    }
-}
-    summary_results(result,llm)
+# llm = ChatGoogleGenerativeAI(model="gemini-pro", temperature=0.3,api_key="AIzaSyAY8U8Asc0ccXyF2_EI2ctM1K6f422fUbY")
+# if __name__ == "__main__":
+#     result = {
+#     "INTRODUCTION": {
+#         "Interview Question": "Tell me about yourself.",
+#         "Expected Answer": "I am a [Your Profession] with [Number] years of experience in [Industry]. I am passionate about [Your Interests] and enjoy working on [Your Projects]. I am particularly interested in this opportunity because [Reason for Interest]."
+#     },
+#     "PROJECT": {
+#         "Interview Question": "Can you describe a challenging project you've worked on?",
+#         "Expected Answer": "One of the most challenging projects I worked on was [Project Name]. The project involved [Project Description]. I faced [Challenges] but was able to overcome them by [Solutions]. The project was successful because [Positive Outcomes]."
+#     },
+#     "TECHNICAL": {
+#         "Interview Question": "What are your technical skills and experience?",
+#         "Expected Answer": "I have strong technical skills in [Technical Skills]. I have experience with [Technologies or Tools]. I have worked on projects involving [Projects or Applications]."
+#     },
+#     "OUTRO": {
+#         "Interview Question": "Do you have any questions for us?",
+#         "Expected Answer": "Yes, I have a few questions. First, could you tell me more about the team I would be working with? Second, what is the company's vision for the future? Finally, what are the opportunities for growth and development within the company?"
+#     }
+# }
+#     summary_results(result,llm)

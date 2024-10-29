@@ -33,7 +33,7 @@ class InterviewState:
 async def websocket_endpoint(websocket: WebSocket):
     await websocket.accept()
     state = InterviewState()
-    llm = ChatGoogleGenerativeAI(model="gemini-pro", temperature=0.3)
+    llm = ChatGoogleGenerativeAI(model="gemini-1.5-flash", temperature=0.3,api_key=GOOGLE_API_KEY)
 
     async def handle_interview():
         if state.interview_bot:

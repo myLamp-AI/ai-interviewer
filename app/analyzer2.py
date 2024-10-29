@@ -72,14 +72,3 @@ def analyze_results(results, llm = None):
 
     return analyzed_results
 
-# Example usage
-if __name__ == "__main__":
-    llm = ChatGoogleGenerativeAI(model="gemini-pro",api_key="AIzaSyAY8U8Asc0ccXyF2_EI2ctM1K6f422fUbY",max_output_tokens=2048)
-    results = {"TECHNICAL":
-               {
-        "What is your greatest strength?": "I believe my greatest strength is my ability to quickly adapt to new situations and learn new skills.",
-        "How do you handle stress?": "I manage stress by prioritizing tasks, maintaining a healthy work-life balance, and practicing mindfulness techniques."
-        }
-    }
-    analyzed_results = analyze_results(results, llm)
-    print(json.dumps(analyzed_results, indent=2))
