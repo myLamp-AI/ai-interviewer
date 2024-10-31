@@ -1,18 +1,20 @@
 import os
-import sys
 from fastapi import FastAPI, WebSocket, WebSocketDisconnect
-from app.interviewer import *
-from app.analyzer import *
-from app.utils import *
-from app.prompts import evaluate_code
+import random
 import asyncio
 import logging
-import json
-sys.path.append(os.path.dirname(os.path.abspath(__file__)))
+from dotenv import load_dotenv
+from langchain_google_genai import ChatGoogleGenerativeAI
+from app.interviewer import InterviewBot
+from app.analyzer import summary_results,analyze_results
+from app.utils import get_cv,get_job_description
+from app.prompts import evaluate_code
+
 load_dotenv()
 GOOGLE_API_KEY = os.getenv("GOOGLE_API_KEY")
 app = FastAPI()
-genai.configure(api_key=GOOGLE_API_KEY)
+
+
 @app.get('/')
 async def root():
     return {"data":"HELLO WORLD"}
@@ -25,8 +27,6 @@ class InterviewState:
         self.interview_bot = None
         self.results = {"INTRODUCTION":{},"PROJECT":{},"CODING":{},"TECHNICAL":{},"OUTRO":{}}
         self.stop_interview = asyncio.Event()
-
-
 
 # WebSocket endpoint
 @app.websocket("/ws")
@@ -198,6 +198,6 @@ async def handle_get_analysis(websocket, state, llm):
 #     except WebSocketDisconnect:
 #         print("WebSocket disconnected")
 
-if __name__ == "__main__":
-    import uvicorn
-    uvicorn.run(app,port=8000)
+# if __name__ == "__main__":
+#     import uvicorn
+#     uvicorn.run(app,port=8000)

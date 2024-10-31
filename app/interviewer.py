@@ -28,6 +28,10 @@ class InterviewBot:
         self.current_answer = None
         self.stop_interview = asyncio.Event()
         self.coding_event = asyncio.Event()
+        
+        with open('questions.txt', 'r') as file:
+            questions = file.readlines()
+        self.questions = [q.strip() for q in questions]
 
         try:
             genai.configure(api_key=GOOGLE_API_KEY)
@@ -74,8 +78,8 @@ class InterviewBot:
 
     async def start_coding_stage(self, websocket):
         try:
-            print("CODING INTERVIEW IS HERE")
-            q1 = random.choice(["Write a python code to Print Hello World", "Write a python code to Print Hello Anish", "Write a python code to Print Hello Duniya"])
+            q1 = random.choice(self.questions)
+            self.questions.remove(q1)
             await websocket.send_json({'type': 'coding_question', 'message': q1})
             await asyncio.wait_for(self.coding_event.wait(), timeout=1000)  # 5-minute timeout
             self.coding_event.clear()

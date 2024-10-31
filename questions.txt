@@ -1,0 +1,57 @@
+Find the maximum and minimum elements in an array.
+Reverse an array.
+Find the "Kth" max and min element in an array.
+Move all negative numbers to the beginning and positive numbers to the end.
+Find the union and intersection of two sorted arrays.
+Find the largest sum contiguous subarray.
+Check if a string is a palindrome.
+Find the first non-repeating character in a string.
+Implement a function to check if two strings are anagrams.
+Find all substrings of a given string.
+Find the longest common prefix among an array of strings.
+Count the number of vowels and consonants in a string.
+Reverse a linked list.
+Detect a cycle in a linked list.
+Find the middle element of a linked list.
+Merge two sorted linked lists.
+Remove duplicates from a sorted linked list.
+Implement a stack using arrays.
+Implement a queue using stacks.
+Check if an expression has balanced parentheses.
+Sort a stack using only one additional stack.
+Implement a circular queue.
+Binary search in a sorted array.
+Find the square root of a number using binary search.
+Find the first and last occurrences of an element in a sorted array.
+Find the peak element in an array.
+Search in a rotated sorted array.
+Implement bubble sort.
+Implement selection sort.
+Implement insertion sort.
+Merge two sorted arrays without extra space.
+Sort an array of 0s, 1s, and 2s.
+Calculate the factorial of a number.
+Find the nth Fibonacci number.
+Solve the Tower of Hanoi problem.
+Generate all permutations of a string.
+Count the number of ways to climb stairs.
+Perform inorder, preorder, and postorder traversals of a binary tree.
+Find the height of a binary tree.
+Check if two binary trees are identical.
+Count the number of leaf nodes in a binary tree.
+Find the lowest common ancestor of two nodes in a binary tree.
+Implement Depth First Search (DFS).
+Implement Breadth First Search (BFS).
+Check if a graph is bipartite.
+Find the number of islands in a grid.
+Detect a cycle in an undirected graph.
+Find the nth Fibonacci number using dynamic programming.
+Solve the Knapsack problem.
+Find the longest increasing subsequence.
+Calculate the minimum number of coins for a given amount.
+Count the number of ways to make change for a given amount.
+Check if a number is a power of two.
+Count the number of 1s in the binary representation of a number.
+Find the single number in an array where every element appears twice except one.
+Calculate the XOR of all elements in an array.
+Find two non-repeating numbers in an array where every other number repeats.
