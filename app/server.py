@@ -5,35 +5,47 @@ import asyncio
 import logging
 from dotenv import load_dotenv
 from langchain_google_genai import ChatGoogleGenerativeAI
-from app.interviewer import InterviewBot
-from app.analyzer import summary_results,analyze_results
-from app.utils import get_cv,get_job_description
-from app.prompts import evaluate_code
+from interviewer import InterviewBot
+from analyzer import summary_results, analyze_results
+from utils import get_cv, get_job_description
+from prompts import evaluate_code
 
 load_dotenv()
 GOOGLE_API_KEY = os.getenv("GOOGLE_API_KEY")
 app = FastAPI()
 
-
 @app.get('/')
 async def root():
-    return {"data":"HELLO WORLD"}
+    return {"data": "HELLO WORLD"}
+
 logging.basicConfig(level=logging.INFO)
-# State management
+
 class InterviewState:
     def __init__(self):
         self.cv_text = ""
         self.job_description = ""
         self.interview_bot = None
-        self.results = {"INTRODUCTION":{},"PROJECT":{},"CODING":{},"TECHNICAL":{},"OUTRO":{}}
+        self.results = {"INTRODUCTION":{}, "PROJECT":{}, "CODING":{}, "TECHNICAL":{}, "OUTRO":{}}
         self.stop_interview = asyncio.Event()
+        self.interview_task = None  # Add this to track the interview task
 
-# WebSocket endpoint
+    async def cleanup(self):
+        if self.interview_bot:
+            self.interview_bot.stop_interview.set()
+            if self.interview_task:
+                try:
+                    self.interview_task.cancel()
+                    await asyncio.wait_for(self.interview_task, timeout=2.0)
+                except (asyncio.CancelledError, asyncio.TimeoutError):
+                    pass
+            self.interview_bot = None
+            self.interview_task = None
+
 @app.websocket("/ws")
 async def websocket_endpoint(websocket: WebSocket):
     await websocket.accept()
     state = InterviewState()
-    llm = ChatGoogleGenerativeAI(model="gemini-1.5-flash", temperature=0.3,api_key=GOOGLE_API_KEY)
+    llm = ChatGoogleGenerativeAI(model="gemini-1.5-flash", temperature=0.3, api_key=GOOGLE_API_KEY)
 
     async def handle_interview():
         if state.interview_bot:
@@ -44,7 +56,7 @@ async def websocket_endpoint(websocket: WebSocket):
             except Exception as e:
                 logging.error(f"Error during interview: {e}")
             finally:
-                state.interview_bot = None
+                await state.cleanup()
 
     try:
         while True:
@@ -54,12 +66,12 @@ async def websocket_endpoint(websocket: WebSocket):
 
     except WebSocketDisconnect:
         logging.info("WebSocket disconnected")
+        await state.cleanup()
     except Exception as e:
         logging.error(f"Unexpected error: {e}")
+        await state.cleanup()
     finally:
-        if state.interview_bot:
-            state.interview_bot.stop_interview.set()
-            state.interview_bot = None
+        await state.cleanup()
 
 async def handle_event(data, websocket, state, llm, handle_interview):
     if data['type'] == 'upload_cv':
@@ -79,18 +91,26 @@ async def handle_event(data, websocket, state, llm, handle_interview):
     elif data['type'] == 'get_summary_analysis':
         await handle_summary_analysis(websocket, state, llm)
     elif data['type'] == 'test_coding_question':
-        try:
-            print("CODING INTERVIEW IS HERE")
-            q1 = random.choice(["Q1. Print Hello World", "Q2. Print Hello Anish", "Q3. Print Hello Duniya"])
-            await websocket.send_json({'type': 'test_coding_question', 'message': q1})
-            #await asyncio.wait_for(self.coding_event.wait(), timeout=1000)  # 5-minute timeout
-            #self.coding_event.clear()
-        except asyncio.TimeoutError:
-            await websocket.send_json({'type': 'coding_timeout', 'message': 'Coding question timed out'})
-        except Exception as e:
-            await websocket.send_json({'type': 'coding_error', 'message': f'Error in coding stage: {str(e)}'})
-        
-        
+        await handle_test_coding_question(websocket)
+
+async def handle_start_interview(websocket, state, handle_interview):
+    if not state.interview_bot:
+        state.interview_bot = InterviewBot(state.cv_text, state.job_description, state.results)
+        state.interview_task = asyncio.create_task(handle_interview())
+        await websocket.send_json({"type": "interview_started", "message": "Interview started"})
+
+async def handle_end_interview(websocket, state):
+    await state.cleanup()
+    await websocket.send_json({"type": "interview_end", "message": "Interview ended"})
+    logging.info("Interview concluded")
+
+async def handle_test_coding_question(websocket):
+    try:
+        q1 = random.choice(["Q1. Print Hello World", "Q2. Print Hello Anish", "Q3. Print Hello Duniya"])
+        await websocket.send_json({'type': 'test_coding_question', 'message': q1})
+    except Exception as e:
+        await websocket.send_json({'type': 'coding_error', 'message': f'Error in coding stage: {str(e)}'})
+
 
 async def handle_summary_analysis(websocket, state, llm):
     analyzed_result = summary_results(state.results, llm)
@@ -105,11 +125,11 @@ async def handle_analyze_jd(data, websocket, state):
     state.job_description = await get_job_description(data, websocket)
     await websocket.send_json({'type': 'jd_analyzed', 'message': "Received JD Successfully", 'job_description': state.job_description})
 
-async def handle_start_interview(websocket, state, handle_interview):
-    if not state.interview_bot:
-        state.interview_bot = InterviewBot(state.cv_text, state.job_description, state.results)
-        asyncio.create_task(handle_interview())
-        await websocket.send_json({"type": "interview_started", "message": "Interview started"})
+# async def handle_start_interview(websocket, state, handle_interview):
+#     if not state.interview_bot:
+#         state.interview_bot = InterviewBot(state.cv_text, state.job_description, state.results)
+#         asyncio.create_task(handle_interview())
+#         await websocket.send_json({"type": "interview_started", "message": "Interview started"})
 
 async def handle_answer(data, state):
     if state.interview_bot:
@@ -137,67 +157,20 @@ async def handle_coding(data, websocket, state, llm):
         await websocket.send_json({"type": "code_evaluation", "result": resp})
         print(e)
 
-async def handle_end_interview(websocket, state):
-    if state.interview_bot:
-        state.interview_bot.stop_interview.set()
-        await asyncio.sleep(0.1)  # Allow time for interview task to react
-        state.interview_bot.stop_interview.clear()
-        await websocket.send_json({"type": "interview_end", "message": "Interview ended"})
-    logging.info("Interview concluded")
+# async def handle_end_interview(websocket, state):
+#     if state.interview_bot:
+#         state.interview_bot.stop_interview.set()
+#         await asyncio.sleep(0.1)  # Allow time for interview task to react
+#         state.interview_bot.stop_interview.clear()
+#         await websocket.send_json({"type": "interview_end", "message": "Interview ended"})
+#     logging.info("Interview concluded")
 
 
 async def handle_get_analysis(websocket, state, llm):
     analyzed_result = analyze_results(state.results, llm)
     await websocket.send_json({"type": "analysis", "result": analyzed_result})
 
-# @app.websocket("/ws")
-# async def websocket_endpoint(websocket: WebSocket):
-#     await websocket.accept()
-#     try:
-#         cv_text = ""
-#         job_description = ""
-#         interview_bot = None
-#         results = {}
-#         stop_interview = asyncio.Event()
-#         llm= ChatGoogleGenerativeAI(model="gemini-pro", temperature=0.3)
-#         async def handle_interview():
-#             nonlocal interview_bot
-#             try:
-#                 await interview_bot.conduct_interview(websocket)
-#             except asyncio.CancelledError:
-#                 print("Interview task cancelled")
-#             finally:
-#                 interview_bot = None
 
-#         while True:
-#             data = await websocket.receive_json()
-#             if data['type'] == 'upload_cv':
-#                 cv_text = await get_cv(data, websocket)  
-#             elif data['type'] == 'analyze_jd':
-#                 job_description = await get_job_description(data, websocket)
-#             elif data['type'] == 'start_interview':
-#                 if not interview_bot:
-#                     interview_bot = InterviewBot(cv_text, job_description, results)
-#                     asyncio.create_task(handle_interview())
-#             elif data['type'] == 'answer':
-#                 if interview_bot:
-#                     interview_bot.current_answer = data['answer']
-#                     interview_bot.answer_event.set()
-#             elif data['type'] == 'coding':
-#                 if interview_bot:
-#                     interview_bot.coding_event.set()
-#             elif data['type'] == 'end_interview':
-#                 if interview_bot:
-#                     interview_bot.stop_interview.set()
-#                     await asyncio.sleep(0.1)  # Give a moment for the interview task to react
-#                     interview_bot.stop_interview.clear()
-#                 print("Interview Concluded")
-#             elif data['type'] == 'get_analysis':
-#                 analyzed_result = analyze_results(results,llm)
-#                 await websocket.send_json({"type": "analysis", "result": analyzed_result})
-#     except WebSocketDisconnect:
-#         print("WebSocket disconnected")
-
-# if __name__ == "__main__":
-#     import uvicorn
-#     uvicorn.run(app,port=8000)
+if __name__ == "__main__":
+    import uvicorn
+    uvicorn.run(app,port=8000)
