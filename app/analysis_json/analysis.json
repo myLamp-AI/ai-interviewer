@@ -1,0 +1,399 @@
+[
+    {
+        "question": "that's great to hear harsh what was your favorite part about your experience at iit kharagpur?",
+        "answer": "Well mostly the fest, i really enjoyed i really felt free and got motivated to work harder next time",
+        "analysis": {
+            "line_analysis": [
+                {
+                    "line": "Well mostly the fest",
+                    "relevance": {
+                        "score": 7,
+                        "reasoning": "It is somewhat relevant to the question as it mentions a specific aspect of the candidate's experience at IIT Kharagpur."
+                    },
+                    "clarity": {
+                        "score": 6,
+                        "reasoning": "The line is clear and easy to understand, but it could have been more specific."
+                    },
+                    "depth": {
+                        "score": 4,
+                        "reasoning": "The line lacks depth as it only mentions one aspect of the candidate's experience."
+                    },
+                    "professionalism": {
+                        "score": 6,
+                        "reasoning": "The language is somewhat professional, but it could be improved by using more formal language."
+                    },
+                    "technical_accuracy": {
+                        "score": 0,
+                        "reasoning": "Not applicable"
+                    }
+                },
+                {
+                    "line": "i really enjoyed i really felt free and got motivated to work harder next time",
+                    "relevance": {
+                        "score": 8,
+                        "reasoning": "It is relevant to the question as it provides more detail about the candidate's positive experience at IIT Kharagpur."
+                    },
+                    "clarity": {
+                        "score": 5,
+                        "reasoning": "The line is somewhat clear, but it could be improved by using more concise language."
+                    },
+                    "depth": {
+                        "score": 6,
+                        "reasoning": "The line provides some depth by explaining how the candidate felt during their experience."
+                    },
+                    "professionalism": {
+                        "score": 5,
+                        "reasoning": "The language is somewhat professional, but it could be improved by using more formal language."
+                    },
+                    "technical_accuracy": {
+                        "score": 0,
+                        "reasoning": "Not applicable"
+                    }
+                }
+            ],
+            "overall_assessment": {
+                "overall_score": 6.5,
+                "strengths": [
+                    "The candidate provided some relevant details about their experience at IIT Kharagpur.",
+                    "The candidate's answer was somewhat clear and easy to understand."
+                ],
+                "areas_for_improvement": [
+                    "The candidate could have provided more depth in their answer by explaining more about their experience.",
+                    "The candidate could have used more professional language in their answer."
+                ],
+                "suggestions": [
+                    "The candidate could have started their answer by providing a brief overview of their experience at IIT Kharagpur before going into more detail about the fest.",
+                    "The candidate could have used more specific language to describe their experience, such as providing examples of the activities they participated in or the people they met.",
+                    "The candidate could have concluded their answer by explaining how their experience at IIT Kharagpur has helped them in their career."
+                ]
+            }
+        }
+    },
+    {
+        "question": "that sounds really fun! i can imagine it was a great way to connect with your classmates and have some fun outside of the classroom what was the most memorable fest you attended?",
+        "answer": "Well it was Moon Indigo",
+        "analysis": {
+            "line_analysis": [
+                {
+                    "line": "Well it was Moon Indigo",
+                    "relevance": {
+                        "score": 10,
+                        "reasoning": "The line directly answers the question by providing the name of the most memorable fest attended."
+                    },
+                    "clarity": {
+                        "score": 10,
+                        "reasoning": "The line is clear and easy to understand, with no ambiguity or confusion."
+                    },
+                    "depth": {
+                        "score": 1,
+                        "reasoning": "The line only provides the name of the fest and lacks any further details or elaboration."
+                    },
+                    "professionalism": {
+                        "score": 7,
+                        "reasoning": "The language is informal and conversational, which may not be considered highly professional in an interview setting."
+                    },
+                    "technical_accuracy": {
+                        "score": 10,
+                        "reasoning": "The line provides a specific and accurate name of the fest, assuming it is a real event."
+                    }
+                }
+            ],
+            "overall_assessment": {
+                "overall_score": 7.6,
+                "strengths": [
+                    "High relevance to the question",
+                    "Clear and understandable language",
+                    "Technically accurate information"
+                ],
+                "areas_for_improvement": [
+                    "Lack of depth and detail",
+                    "Informal and conversational language"
+                ],
+                "suggestions": [
+                    "Provide more context and details about the fest, such as its significance, activities, or personal experiences.",
+                    "Use more formal and professional language, avoiding contractions and colloquialisms."
+                ]
+            }
+        }
+    },
+    {
+        "question": "moon indigo sounds like it was a blast! what was your favorite part about it?",
+        "answer": "Well obviously the DJ",
+        "analysis": {
+            "line_analysis": [
+                {
+                    "line": "Well obviously the DJ",
+                    "relevance": {
+                        "score": 5,
+                        "reasoning": "The line is somewhat relevant to the question as it mentions a specific aspect of the event, but it does not provide a comprehensive answer."
+                    },
+                    "clarity": {
+                        "score": 7,
+                        "reasoning": "The line is clear and easy to understand."
+                    },
+                    "depth": {
+                        "score": 1,
+                        "reasoning": "The line is not very detailed or in-depth, as it only mentions one specific aspect of the event."
+                    },
+                    "professionalism": {
+                        "score": 5,
+                        "reasoning": "The language used is somewhat informal and does not convey a professional tone."
+                    },
+                    "technical_accuracy": {
+                        "score": 0,
+                        "reasoning": "The line does not provide any technical information, so this criterion is not applicable."
+                    }
+                }
+            ],
+            "overall_assessment": {
+                "overall_score": 4,
+                "strengths": [
+                    "The line is clear and easy to understand."
+                ],
+                "areas_for_improvement": [
+                    "The line is not very detailed or in-depth.",
+                    "The language used is somewhat informal and does not convey a professional tone.",
+                    "The line does not provide a comprehensive answer to the question."
+                ],
+                "suggestions": [
+                    "The candidate could have provided more details about what they enjoyed about the DJ's performance.",
+                    "The candidate could have used more formal language and avoided using colloquialisms.",
+                    "The candidate could have mentioned other aspects of the event that they enjoyed in addition to the DJ."
+                ]
+            }
+        }
+    },
+    {
+        "question": "i can imagine the dj was amazing! what was the best song they played?",
+        "answer": "Well i don't remeber that part though",
+        "analysis": {
+            "line_analysis": [
+                {
+                    "line": "Well i don't remeber that part though",
+                    "relevance": {
+                        "score": 0,
+                        "reasoning": "The line is not relevant to the question asked, which was about the best song played by the DJ."
+                    },
+                    "clarity": {
+                        "score": 7,
+                        "reasoning": "The line is clear and understandable, despite the grammatical error."
+                    },
+                    "depth": {
+                        "score": 0,
+                        "reasoning": "The line provides no depth or detail about the DJ or the music played."
+                    },
+                    "professionalism": {
+                        "score": 5,
+                        "reasoning": "The line is somewhat unprofessional due to the grammatical error and the use of informal language."
+                    },
+                    "technical_accuracy": {
+                        "score": 0,
+                        "reasoning": "The line does not provide any technical information."
+                    }
+                }
+            ],
+            "overall_assessment": {
+                "overall_score": 2.4,
+                "strengths": [
+                    "The line is clear and understandable."
+                ],
+                "areas_for_improvement": [
+                    "Relevance to the question",
+                    "Depth of information",
+                    "Professionalism",
+                    "Technical accuracy"
+                ],
+                "suggestions": [
+                    "The candidate could have answered by saying that they do not remember the best song played by the DJ.",
+                    "The candidate could have provided more context or details about the DJ or the music played.",
+                    "The candidate should avoid using informal language and grammatical errors in a professional setting."
+                ]
+            }
+        }
+    },
+    {
+        "question": "that's okay! i'm sure it was a great night regardless what was your favorite part of the fest overall?",
+        "answer": "mostly foods and dancing",
+        "analysis": {
+            "line_analysis": [
+                {
+                    "line": "mostly foods and dancing",
+                    "relevance": {
+                        "score": 7,
+                        "reasoning": "The line is directly relevant to the question, as it mentions the candidate's favorite part of the festival."
+                    },
+                    "clarity": {
+                        "score": 8,
+                        "reasoning": "The line is clear and easy to understand, using simple and concise language."
+                    },
+                    "depth": {
+                        "score": 5,
+                        "reasoning": "The line is not very detailed or in-depth, as it only mentions two specific aspects of the festival."
+                    },
+                    "professionalism": {
+                        "score": 7,
+                        "reasoning": "The language used is generally professional, although the use of informal language such as 'mostly' could be improved."
+                    },
+                    "technical_accuracy": {
+                        "score": 10,
+                        "reasoning": "The line does not contain any technical information, so this criterion is not applicable."
+                    }
+                }
+            ],
+            "overall_assessment": {
+                "overall_score": 7,
+                "strengths": [
+                    "The answer is relevant to the question.",
+                    "The language used is generally clear and easy to understand."
+                ],
+                "areas_for_improvement": [
+                    "The answer could be more detailed and in-depth.",
+                    "The use of informal language could be improved."
+                ],
+                "suggestions": [
+                    "To improve the depth of the answer, the candidate could have provided more specific examples or details about their favorite parts of the festival.",
+                    "To improve the professionalism of the answer, the candidate could have used more formal language and avoided using contractions."
+                ]
+            }
+        }
+    },
+    {
+        "question": "that sounds like a great time! what was your favorite food that you tried?",
+        "answer": "Biryani",
+        "analysis": {
+            "line_analysis": [
+                {
+                    "line": "Biryani",
+                    "relevance": {
+                        "score": 10,
+                        "reasoning": "The candidate's answer is directly relevant to the question asked, which was about their favorite food that they tried."
+                    },
+                    "clarity": {
+                        "score": 10,
+                        "reasoning": "The candidate's answer is clear and easy to understand. They simply state their favorite food without any ambiguity."
+                    },
+                    "depth": {
+                        "score": 1,
+                        "reasoning": "The candidate's answer is not very in-depth or detailed. They only provide the name of their favorite food without any further elaboration."
+                    },
+                    "professionalism": {
+                        "score": 10,
+                        "reasoning": "The candidate's answer is professional and appropriate for an interview setting."
+                    },
+                    "technical_accuracy": {
+                        "score": 10,
+                        "reasoning": "The candidate's answer is technically accurate, as Biryani is a type of food."
+                    }
+                }
+            ],
+            "overall_assessment": {
+                "overall_score": 8.2,
+                "strengths": [
+                    "The candidate's answer is highly relevant to the question asked.",
+                    "The candidate's answer is clear and easy to understand.",
+                    "The candidate's answer is professional and appropriate for an interview setting.",
+                    "The candidate's answer is technically accurate."
+                ],
+                "areas_for_improvement": [
+                    "The candidate's answer could be more in-depth or detailed."
+                ],
+                "suggestions": [
+                    "To improve their answer, the candidate could have provided more information about their favorite food, such as what type of cuisine it is, where they tried it, or why they liked it."
+                ]
+            }
+        }
+    },
+    {
+        "question": "biryani is delicious! what's your favorite type of biryani?",
+        "answer": "can't say",
+        "analysis": {
+            "line_analysis": [
+                {
+                    "line": "can't say",
+                    "relevance": {
+                        "score": 0,
+                        "reasoning": "The line is not relevant to the question asked, which was about the candidate's favorite type of biryani."
+                    },
+                    "clarity": {
+                        "score": 10,
+                        "reasoning": "The line is clear and easy to understand."
+                    },
+                    "depth": {
+                        "score": 0,
+                        "reasoning": "The line provides no depth or detail."
+                    },
+                    "professionalism": {
+                        "score": 5,
+                        "reasoning": "The line is not particularly professional, as it is a casual way of expressing a lack of preference."
+                    },
+                    "technical_accuracy": {
+                        "score": 0,
+                        "reasoning": "The line does not provide any technical information."
+                    }
+                }
+            ],
+            "overall_assessment": {
+                "overall_score": 2.5,
+                "strengths": [
+                    "Clarity"
+                ],
+                "areas_for_improvement": [
+                    "Relevance",
+                    "Depth",
+                    "Professionalism",
+                    "Technical Accuracy"
+                ],
+                "suggestions": [
+                    "The candidate could have answered the question by stating their favorite type of biryani, or by explaining that they do not have a favorite type.",
+                    "The candidate could have provided more detail about their favorite type of biryani, such as the ingredients or flavors that they enjoy.",
+                    "The candidate could have used more professional language, such as 'I do not have a particular preference for any type of biryani.'"
+                ]
+            }
+        }
+    },
+    {
+        "question": "that's okay! is there anything else you'd like to share about your experience at moon indigo?",
+        "answer": "nah",
+        "analysis": {
+            "line_analysis": [
+                {
+                    "line": "nah",
+                    "relevance": {
+                        "score": 0,
+                        "reasoning": "The response is not relevant to the question as it does not provide any additional information about the candidate's experience at Moon Indigo."
+                    },
+                    "clarity": {
+                        "score": 10,
+                        "reasoning": "The response is clear and easy to understand."
+                    },
+                    "depth": {
+                        "score": 0,
+                        "reasoning": "The response lacks depth and does not provide any specific details about the candidate's experience."
+                    },
+                    "professionalism": {
+                        "score": 0,
+                        "reasoning": "The response is unprofessional and does not demonstrate a positive attitude or willingness to engage in the interview process."
+                    },
+                    "technical_accuracy": {
+                        "score": 0,
+                        "reasoning": "The response does not provide any technical information that could be assessed for accuracy."
+                    }
+                }
+            ],
+            "overall_assessment": {
+                "overall_score": 0,
+                "strengths": [],
+                "areas_for_improvement": [
+                    "Relevance",
+                    "Depth",
+                    "Professionalism"
+                ],
+                "suggestions": [
+                    "The candidate should have provided specific examples or anecdotes to demonstrate their experience at Moon Indigo.",
+                    "The candidate should have used more professional language and demonstrated a more positive attitude.",
+                    "The candidate should have provided more in-depth information about their role and responsibilities at Moon Indigo."
+                ]
+            }
+        }
+    }
+]
