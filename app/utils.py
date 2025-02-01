@@ -8,9 +8,7 @@ sys.path.append(os.path.dirname(os.path.abspath(__file__)))
 
 from fastapi import WebSocket
 import io
-import json
-
-
+from PyPDF2 import PdfReader
 
 async def get_cv(data,websocket:WebSocket):
     pdf_file = io.BytesIO(bytearray(data['cv_data']))
@@ -33,6 +31,7 @@ def read_cv(cv_path):
         reader = PdfReader(file)
         return ' '.join(page.extract_text() for page in reader.pages)
     
+import json
 
 def save_analysis_results(results):
     with open('interview_analysis.json', 'w') as f:
@@ -41,7 +40,9 @@ def save_analysis_results(results):
 
 
 
-
+from fastapi import WebSocket
+import io
+from PyPDF2 import PdfReader
 
 async def get_cv(data,websocket:WebSocket):
     pdf_file = io.BytesIO(bytearray(data['cv_data']))
@@ -63,6 +64,7 @@ def read_cv(cv_path):
         reader = PdfReader(file)
         return ' '.join(page.extract_text() for page in reader.pages)
     
+import json
 
 def save_analysis_results(results):
     with open('interview_analysis.json', 'w') as f:
