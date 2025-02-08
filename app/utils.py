@@ -1,14 +1,13 @@
 
 import os
 from dotenv import load_dotenv
-from PyPDF2 import PdfReader
+from pypdf import PdfReader
 load_dotenv()
 import sys
 sys.path.append(os.path.dirname(os.path.abspath(__file__)))
 
 from fastapi import WebSocket
 import io
-from PyPDF2 import PdfReader
 
 async def get_cv(data,websocket:WebSocket):
     pdf_file = io.BytesIO(bytearray(data['cv_data']))
@@ -42,7 +41,7 @@ def save_analysis_results(results):
 
 from fastapi import WebSocket
 import io
-from PyPDF2 import PdfReader
+from pypdf import PdfReader
 
 async def get_cv(data,websocket:WebSocket):
     pdf_file = io.BytesIO(bytearray(data['cv_data']))

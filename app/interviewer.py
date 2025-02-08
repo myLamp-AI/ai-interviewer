@@ -103,7 +103,7 @@ class InterviewBot:
                         prompt = PROMPTS[stage].format(variable=cleaned_text)
                        #print(prompt)
                     except Exception as e:
-                       #print(e)
+                       print(e)
 
                 while True:
                     if self.stop_interview.is_set():
