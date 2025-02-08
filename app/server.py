@@ -80,8 +80,8 @@ async def handle_event(data, websocket, state, llm, handle_interview):
         await handle_summary_analysis(websocket, state, llm)
     elif data['type'] == 'test_coding_question':
         try:
-            print("CODING INTERVIEW IS HERE")
-            q1 = random.choice(["Q1. Print Hello World", "Q2. Print Hello Anish", "Q3. Print Hello Duniya"])
+           #print("CODING INTERVIEW IS HERE")
+            q1 = random.choice(["Q1.#print Hello World", "Q2.#print Hello Anish", "Q3.#print Hello Duniya"])
             await websocket.send_json({'type': 'test_coding_question', 'message': q1})
             #await asyncio.wait_for(self.coding_event.wait(), timeout=1000)  # 5-minute timeout
             #self.coding_event.clear()
@@ -123,19 +123,19 @@ async def handle_coding(data, websocket, state, llm):
             # Simulate the coding session
             code = data.get("code")
             ques = data.get("ques")
-            print(code,ques)
+           #print(code,ques)
             if code:
-                print(code,ques)
+               #print(code,ques)
                 resp = evaluate_code(llm,ques,code)
-                print(code,ques)
-                print(resp)
+               #print(code,ques)
+               #print(resp)
                 await websocket.send_json({"type": "code_evaluation", "result": resp})
                 if resp:
                     if resp["RESULT"]==True:
                         state.interview_bot.coding_event.set()
     except Exception as e:
         await websocket.send_json({"type": "code_evaluation", "result": resp})
-        print(e)
+       #print(e)
 
 async def handle_end_interview(websocket, state):
     if state.interview_bot:
@@ -165,7 +165,7 @@ async def handle_get_analysis(websocket, state, llm):
 #             try:
 #                 await interview_bot.conduct_interview(websocket)
 #             except asyncio.CancelledError:
-#                 print("Interview task cancelled")
+#                #print("Interview task cancelled")
 #             finally:
 #                 interview_bot = None
 
@@ -191,12 +191,12 @@ async def handle_get_analysis(websocket, state, llm):
 #                     interview_bot.stop_interview.set()
 #                     await asyncio.sleep(0.1)  # Give a moment for the interview task to react
 #                     interview_bot.stop_interview.clear()
-#                 print("Interview Concluded")
+#                #print("Interview Concluded")
 #             elif data['type'] == 'get_analysis':
 #                 analyzed_result = analyze_results(results,llm)
 #                 await websocket.send_json({"type": "analysis", "result": analyzed_result})
 #     except WebSocketDisconnect:
-#         print("WebSocket disconnected")
+#        #print("WebSocket disconnected")
 
 if __name__ == "__main__":
     import uvicorn

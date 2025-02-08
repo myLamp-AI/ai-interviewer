@@ -74,8 +74,8 @@ class InterviewBot:
 
     async def start_coding_stage(self, websocket):
         try:
-            print("CODING INTERVIEW IS HERE")
-            q1 = random.choice(["Write a python code to Print Hello World", "Write a python code to Print Hello Anish", "Write a python code to Print Hello Duniya"])
+           #print("CODING INTERVIEW IS HERE")
+            q1 = random.choice(["Write a python code to#print Hello World", "Write a python code to#print Hello Anish", "Write a python code to#print Hello Duniya"])
             await websocket.send_json({'type': 'coding_question', 'message': q1})
             await asyncio.wait_for(self.coding_event.wait(), timeout=1000)  # 5-minute timeout
             self.coding_event.clear()
@@ -87,7 +87,7 @@ class InterviewBot:
     async def conduct_interview(self, websocket):
         prompt = ""
         for stage in self.stages:
-            print(f"\n--- {stage} STAGE ---")
+           #print(f"\n--- {stage} STAGE ---")
             try:
                 self.message_history = ChatMessageHistory()
                 if stage == "TECHNICAL":
@@ -101,9 +101,9 @@ class InterviewBot:
                     try:
                         cleaned_text = self.cv_parts[stage].replace("{", "").replace("}", "")
                         prompt = PROMPTS[stage].format(variable=cleaned_text)
-                        print(prompt)
+                       #print(prompt)
                     except Exception as e:
-                        print(e)
+                       #print(e)
 
                 while True:
                     if self.stop_interview.is_set():
@@ -124,7 +124,7 @@ class InterviewBot:
                     if not response:
                         break
 
-                    print("Interviewer:", response)
+                   #print("Interviewer:", response)
                     await websocket.send_json({'type': 'interview_question', 'question': response})
 
                     try:
@@ -136,7 +136,7 @@ class InterviewBot:
                         await websocket.send_json({'type': 'answer_timeout', 'message': 'Answer timed out'})
                         break
 
-                    print("You:", answer)
+                   #print("You:", answer)
                     if answer and "exit" in answer.lower():
                         return
 
@@ -149,11 +149,11 @@ class InterviewBot:
                     await asyncio.sleep(0.1)
 
             except Exception as e:
-                print(f"Error in {stage} stage: {str(e)}")
+               #print(f"Error in {stage} stage: {str(e)}")
                 await websocket.send_json({'type': 'stage_error', 'message': f'Error in {stage} stage: {str(e)}'})
                 continue
 
-        print("\nInterview concluded. Thank you for your time!")
+       #print("\nInterview concluded. Thank you for your time!")
         await websocket.send_json({'type': 'interview_end', 'message': 'Interview completed'})
 
 
@@ -161,7 +161,7 @@ class InterviewBot:
 
 async def conduct_interview(interview_bot, websocket,stop_interview):
     for stage in interview_bot.stages:
-        print(f"\n--- {stage} STAGE ---")
+       #print(f"\n--- {stage} STAGE ---")
         
         interview_bot.message_history = ChatMessageHistory()
         if stage == "TECHNICAL":
@@ -187,14 +187,14 @@ async def conduct_interview(interview_bot, websocket,stop_interview):
                 if "exit" in response or "interview concluded" in response:
                     break
 
-            print("Interviewer:", response)
+           #print("Interviewer:", response)
             #interview_bot.text_to_speech(response)
             await websocket.send_json({'type': 'interview_question', 'question': response})
 
-            print("Please speak your answer...")
+           #print("Please speak your answer...")
             answer_data = await websocket.receive_json()
             answer = answer_data.get('answer', '')
-            print("You:", answer)
+           #print("You:", answer)
             if answer:
                 if "exit" in answer:
                     return
@@ -209,6 +209,6 @@ async def conduct_interview(interview_bot, websocket,stop_interview):
             interview_bot.result[response] = answer
             await asyncio.sleep(0.1)
             
-    print("\nInterview concluded. Thank you for your time!")
+   #print("\nInterview concluded. Thank you for your time!")
     await websocket.send_json({'type': 'interview_end', 'message': 'Interview completed'}) 
     return

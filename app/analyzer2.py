@@ -56,9 +56,9 @@ def analyze_results(results, llm = None):
     for stage, item in results.items():
         qa_pairs = "\n\n".join([f"Question: {q}\nAnswer: {a}" for q, a in item.items()])
         analysis = chain.invoke({'qa_pairs': qa_pairs})
-        print(analysis)
+       #print(analysis)
         analysis = str(analysis['text'].strip().strip('```json').strip('```'))
-        print(analysis)
+       #print(analysis)
         time.sleep(2)
         try:
             analysis_json = json.loads(analysis)
@@ -67,8 +67,8 @@ def analyze_results(results, llm = None):
                 "analysis": analysis_json
             })
         except json.JSONDecodeError:
-            print(f"Error decoding JSON for question: {stage}")
-            print("Raw analysis:", analysis)
+           #print(f"Error decoding JSON for question: {stage}")
+           #print("Raw analysis:", analysis)
 
     return analyzed_results
 
@@ -82,4 +82,4 @@ if __name__ == "__main__":
         }
     }
     analyzed_results = analyze_results(results, llm)
-    print(json.dumps(analyzed_results, indent=2))
+   #print(json.dumps(analyzed_results, indent=2))

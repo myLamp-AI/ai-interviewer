@@ -55,9 +55,9 @@ def analyze_results(results, llm = None):
     analyzed_results = []
     for question,answer in results.items():
         analysis = chain.invoke({'question':question, 'answer':answer})
-        print(analysis)
+        ##print(analysis)
         analysis = str(analysis['text'].strip().strip('```json').strip('```'))
-        print(analysis)
+        ##print(analysis)
         time.sleep(1)
         try:
             analysis_json = json.loads(analysis)
@@ -67,8 +67,8 @@ def analyze_results(results, llm = None):
                 "analysis": analysis_json
             })
         except json.JSONDecodeError:
-            print(f"Error decoding JSON for question: {question}")
-            print("Raw analysis:", analysis)
+           print(f"Error decoding JSON for question: {question}")
+           #print("Raw analysis:", analysis)
 
     return analyzed_results
 
@@ -123,10 +123,10 @@ def summary_results(results,llm):
                 analysis_json = json.loads(analysis_text)
                 analyzed_results[stage] = analysis_json
             except json.JSONDecodeError:
-                print(f"Error decoding JSON for question: {stage}")
-                print("Raw analysis:", analysis_text)
+               print(f"Error decoding JSON for question: {stage}")
+               #print("Raw analysis:", analysis_text)
     
-    print(analyzed_results)
+    #print(analyzed_results)
     with open("data.json", "w") as f:
         json.dump(analyzed_results, f, indent=2)
     return analyzed_results

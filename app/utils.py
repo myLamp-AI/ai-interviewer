@@ -16,13 +16,13 @@ async def get_cv(data,websocket:WebSocket):
     pdf_text = ""
     for page in reader.pages:
         pdf_text += page.extract_text()
-    print(pdf_text)
+   #print(pdf_text)
     await websocket.send_json({'type': 'cv_uploaded', 'message': 'CV data received', 'cv_text': pdf_text})
     return pdf_text
 
 async def get_job_description(data,websocket:WebSocket):
     job_description = data['job_description']
-    print(job_description)
+   #print(job_description)
     await websocket.send_json({'type': 'jd_analyzed', 'message': "Received JD Successfully", 'job_description': job_description})
     return job_description
 
@@ -36,7 +36,7 @@ import json
 def save_analysis_results(results):
     with open('interview_analysis.json', 'w') as f:
         json.dump(results, f, indent=2)
-    print("Analysis results saved to 'interview_analysis.json'")
+   #print("Analysis results saved to 'interview_analysis.json'")
 
 
 
@@ -50,12 +50,12 @@ async def get_cv(data,websocket:WebSocket):
     pdf_text = ""
     for page in reader.pages:
         pdf_text += page.extract_text()
-    print(pdf_text)
+   #print(pdf_text)
     return pdf_text
 
 async def get_job_description(data,websocket:WebSocket):
     job_description = data['job_description']
-    print(job_description)
+   #print(job_description)
     
     return job_description
 
@@ -69,5 +69,5 @@ import json
 def save_analysis_results(results):
     with open('interview_analysis.json', 'w') as f:
         json.dump(results, f, indent=2)
-    print("Analysis results saved to 'interview_analysis.json'")
+   #print("Analysis results saved to 'interview_analysis.json'")
 

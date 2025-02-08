@@ -183,8 +183,8 @@ def evaluate_code(model,question,code):
         return parsed_output
 
     except Exception as e:
-        print(f"Error parsing output: {e}")
-        print(f"Raw output: {raw_output}")
+       #print(f"Error parsing output: {e}")
+       #print(f"Raw output: {raw_output}")
         
         # Fallback: simple boolean extraction
         return {"RESULT": "true" in raw_output.lower() or "correct" in raw_output.lower()}
@@ -240,5 +240,5 @@ def get_resume_in_parts(model,resume):
     ask_question_part_prompt = ASK_QUESTION_PART.format(resume=resume)
     answer = model.invoke(ask_question_part_prompt)
     json_answer = json.loads(answer.content.strip().strip('```json').strip('```'))
-    print(json_answer)
+   #print(json_answer)
     return json_answer
