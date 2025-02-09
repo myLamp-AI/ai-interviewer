@@ -49,7 +49,7 @@ async def websocket_endpoint(websocket: WebSocket):
     try:
         while True:
             data = await websocket.receive_json()
-            logging.info(f"Received data: {data}")
+            # logging.info(f"Received data: {data}")
             await handle_event(data, websocket, state, llm, handle_interview)
 
     except WebSocketDisconnect:
