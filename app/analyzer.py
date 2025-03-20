@@ -135,7 +135,7 @@ from langchain_google_genai import ChatGoogleGenerativeAI
 import google.generativeai as genai
 import os
 
-llm = ChatGoogleGenerativeAI(model="gemini-pro", temperature=0.3,api_key="AIzaSyAY8U8Asc0ccXyF2_EI2ctM1K6f422fUbY")
+llm = ChatGoogleGenerativeAI(model="gemini-2.0-flash-lite", temperature=0.3,api_key="AIzaSyAY8U8Asc0ccXyF2_EI2ctM1K6f422fUbY")
 if __name__ == "__main__":
     result = {
     "INTRODUCTION": {

@@ -74,7 +74,7 @@ def analyze_results(results, llm = None):
 
 # Example usage
 if __name__ == "__main__":
-    llm = ChatGoogleGenerativeAI(model="gemini-pro",api_key="AIzaSyAY8U8Asc0ccXyF2_EI2ctM1K6f422fUbY",max_output_tokens=2048)
+    llm = ChatGoogleGenerativeAI(model="gemini-2.0-flash-lite",api_key="AIzaSyAY8U8Asc0ccXyF2_EI2ctM1K6f422fUbY",max_output_tokens=2048)
     results = {"TECHNICAL":
                {
         "What is your greatest strength?": "I believe my greatest strength is my ability to quickly adapt to new situations and learn new skills.",

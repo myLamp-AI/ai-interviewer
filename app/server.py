@@ -33,7 +33,7 @@ class InterviewState:
 async def websocket_endpoint(websocket: WebSocket):
     await websocket.accept()
     state = InterviewState()
-    llm = ChatGoogleGenerativeAI(model="gemini-pro", temperature=0.3)
+    llm = ChatGoogleGenerativeAI(model="gemini-2.0-flash-lite", temperature=0.3)
 
     async def handle_interview():
         if state.interview_bot:
@@ -148,6 +148,7 @@ async def handle_end_interview(websocket, state):
 
 async def handle_get_analysis(websocket, state, llm):
     analyzed_result = analyze_results(state.results, llm)
+    # print("ANALYZED RESULT",analyzed_result)
     await websocket.send_json({"type": "analysis", "result": analyzed_result})
 
 # @app.websocket("/ws")
@@ -159,7 +160,7 @@ async def handle_get_analysis(websocket, state, llm):
 #         interview_bot = None
 #         results = {}
 #         stop_interview = asyncio.Event()
-#         llm= ChatGoogleGenerativeAI(model="gemini-pro", temperature=0.3)
+#         llm= ChatGoogleGenerativeAI(model="gemini-2.0-flash-lite", temperature=0.3)
 #         async def handle_interview():
 #             nonlocal interview_bot
 #             try:
@@ -200,4 +201,4 @@ async def handle_get_analysis(websocket, state, llm):
 
 if __name__ == "__main__":
     import uvicorn
-    uvicorn.run(app,port=8000)
+    uvicorn.run(app,port=5000)

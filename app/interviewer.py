@@ -31,7 +31,7 @@ class InterviewBot:
 
         try:
             genai.configure(api_key=GOOGLE_API_KEY)
-            self.model = ChatGoogleGenerativeAI(model="gemini-pro", temperature=0.3)
+            self.model = ChatGoogleGenerativeAI(model="gemini-2.0-flash-lite", temperature=0.3)
         except Exception as e:
             raise Exception(f"Failed to initialize Google Generative AI: {str(e)}")
 

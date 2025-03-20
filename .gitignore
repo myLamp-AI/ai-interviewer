@@ -1,3 +1,4 @@
 .env
 exp.ipynb
 __pycache__
+venv/
