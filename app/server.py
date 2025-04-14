@@ -1,3 +1,4 @@
+# /app/server.py
 import os
 import sys
 from fastapi import FastAPI, WebSocket, WebSocketDisconnect
@@ -5,6 +6,7 @@ from app.interviewer import *
 from app.analyzer import *
 from app.utils import *
 from app.prompts import evaluate_code
+from fastapi.middleware.cors import CORSMiddleware
 import asyncio
 import logging
 import json
@@ -13,6 +15,16 @@ load_dotenv()
 GOOGLE_API_KEY = os.getenv("GOOGLE_API_KEY")
 app = FastAPI()
 genai.configure(api_key=GOOGLE_API_KEY)
+
+# CORS Middleware
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["*"],
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
+
 @app.get('/')
 async def root():
     return {"data":"HELLO WORLD"}
@@ -23,7 +35,13 @@ class InterviewState:
         self.cv_text = ""
         self.job_description = ""
         self.interview_bot = None
-        self.results = {"INTRODUCTION":{},"PROJECT":{},"CODING":{},"TECHNICAL":{},"OUTRO":{}}
+        self.results = {
+            "INTRODUCTION": {"conversation": [], "analysis": {}},
+            "PROJECT": {"conversation": [], "analysis": {}},
+            "CODING": {"conversation": [], "analysis": {}},
+            "TECHNICAL": {"conversation": [], "analysis": {}},
+            "OUTRO": {"conversation": [], "analysis": {}}
+        }
         self.stop_interview = asyncio.Event()
 
 
@@ -44,6 +62,15 @@ async def websocket_endpoint(websocket: WebSocket):
             except Exception as e:
                 logging.error(f"Error during interview: {e}")
             finally:
+                if hasattr(state.interview_bot, 'last_question') and state.interview_bot.last_question:
+                    current_stage = state.interview_bot.current_stage
+                    if "conversation" not in state.results[current_stage]:
+                        state.results[current_stage]["conversation"] = []
+                    
+                    state.results[current_stage]["conversation"].append({
+                        "interviewer": state.interview_bot.last_question,
+                        "you": ""  # Empty string for unanswered question
+                    })
                 state.interview_bot = None
 
     try:
@@ -62,12 +89,8 @@ async def websocket_endpoint(websocket: WebSocket):
             state.interview_bot = None
 
 async def handle_event(data, websocket, state, llm, handle_interview):
-    if data['type'] == 'upload_cv':
-        await handle_upload_cv(data, websocket, state)
-    elif data['type'] == 'analyze_jd':
-        await handle_analyze_jd(data, websocket, state)
-    elif data['type'] == 'start_interview':
-        await handle_start_interview(websocket, state, handle_interview)
+    if data['type'] == 'start_interview':
+        await handle_start_interview(data,websocket, state, handle_interview)
     elif data['type'] == 'answer':
         await handle_answer(data, state)
     elif data['type'] == 'coding':
@@ -75,9 +98,7 @@ async def handle_event(data, websocket, state, llm, handle_interview):
     elif data['type'] == 'end_interview':
         await handle_end_interview(websocket, state)
     elif data['type'] == 'get_analysis':
-        await handle_get_analysis(websocket, state, llm)
-    elif data['type'] == 'get_summary_analysis':
-        await handle_summary_analysis(websocket, state, llm)
+        await handle_get_analysis(data,websocket, state, llm)
     elif data['type'] == 'test_coding_question':
         try:
            #print("CODING INTERVIEW IS HERE")
@@ -90,24 +111,10 @@ async def handle_event(data, websocket, state, llm, handle_interview):
         except Exception as e:
             await websocket.send_json({'type': 'coding_error', 'message': f'Error in coding stage: {str(e)}'})
         
-        
 
-async def handle_summary_analysis(websocket, state, llm):
-    analyzed_result = summary_results(state.results, llm)
-    await websocket.send_json({"type": "analysis", "result": analyzed_result})
-
-# Handlers for specific events
-async def handle_upload_cv(data, websocket, state):
-    state.cv_text = await get_cv(data, websocket)
-    await websocket.send_json({'type': 'cv_uploaded', 'message': 'CV data received', 'cv_text': state.cv_text})
-    return
-async def handle_analyze_jd(data, websocket, state):
-    state.job_description = await get_job_description(data, websocket)
-    await websocket.send_json({'type': 'jd_analyzed', 'message': "Received JD Successfully", 'job_description': state.job_description})
-
-async def handle_start_interview(websocket, state, handle_interview):
+async def handle_start_interview(data,websocket, state, handle_interview):
     if not state.interview_bot:
-        state.interview_bot = InterviewBot(state.cv_text, state.job_description, state.results)
+        state.interview_bot = InterviewBot(data["cv_text"], data["job_description"], state.results)
         asyncio.create_task(handle_interview())
         await websocket.send_json({"type": "interview_started", "message": "Interview started"})
 
@@ -115,6 +122,7 @@ async def handle_answer(data, state):
     if state.interview_bot:
         state.interview_bot.current_answer = data['answer']
         state.interview_bot.answer_event.set()
+        state.interview_bot.last_question = None
 
 async def handle_coding(data, websocket, state, llm):
     try:
@@ -139,6 +147,24 @@ async def handle_coding(data, websocket, state, llm):
 
 async def handle_end_interview(websocket, state):
     if state.interview_bot:
+        # If there's an active last question that wasn't answered, store it
+        if hasattr(state.interview_bot, 'last_question') and state.interview_bot.last_question:
+            current_stage = state.interview_bot.current_stage
+            
+            # Ensure the section exists in results
+            if current_stage not in state.results:
+                state.results[current_stage] = {}
+            
+            # Ensure the conversation array exists
+            if "conversation" not in state.results[current_stage]:
+                state.results[current_stage]["conversation"] = []
+            
+            # Add the unanswered question to the conversation
+            state.results[current_stage]["conversation"].append({
+                "interviewer": state.interview_bot.last_question,
+                "you": ""  # Empty string for unanswered question
+            })
+        
         state.interview_bot.stop_interview.set()
         await asyncio.sleep(0.1)  # Allow time for interview task to react
         state.interview_bot.stop_interview.clear()
@@ -146,58 +172,28 @@ async def handle_end_interview(websocket, state):
     logging.info("Interview concluded")
 
 
-async def handle_get_analysis(websocket, state, llm):
-    analyzed_result = analyze_results(state.results, llm)
-    # print("ANALYZED RESULT",analyzed_result)
+async def handle_get_analysis(data, websocket, state, llm):
+    analyzed_result = analyze_results(state.results, llm, data["rubrics"])
     await websocket.send_json({"type": "analysis", "result": analyzed_result})
 
-# @app.websocket("/ws")
-# async def websocket_endpoint(websocket: WebSocket):
-#     await websocket.accept()
-#     try:
-#         cv_text = ""
-#         job_description = ""
-#         interview_bot = None
-#         results = {}
-#         stop_interview = asyncio.Event()
-#         llm= ChatGoogleGenerativeAI(model="gemini-2.0-flash-lite", temperature=0.3)
-#         async def handle_interview():
-#             nonlocal interview_bot
-#             try:
-#                 await interview_bot.conduct_interview(websocket)
-#             except asyncio.CancelledError:
-#                #print("Interview task cancelled")
-#             finally:
-#                 interview_bot = None
-
-#         while True:
-#             data = await websocket.receive_json()
-#             if data['type'] == 'upload_cv':
-#                 cv_text = await get_cv(data, websocket)  
-#             elif data['type'] == 'analyze_jd':
-#                 job_description = await get_job_description(data, websocket)
-#             elif data['type'] == 'start_interview':
-#                 if not interview_bot:
-#                     interview_bot = InterviewBot(cv_text, job_description, results)
-#                     asyncio.create_task(handle_interview())
-#             elif data['type'] == 'answer':
-#                 if interview_bot:
-#                     interview_bot.current_answer = data['answer']
-#                     interview_bot.answer_event.set()
-#             elif data['type'] == 'coding':
-#                 if interview_bot:
-#                     interview_bot.coding_event.set()
-#             elif data['type'] == 'end_interview':
-#                 if interview_bot:
-#                     interview_bot.stop_interview.set()
-#                     await asyncio.sleep(0.1)  # Give a moment for the interview task to react
-#                     interview_bot.stop_interview.clear()
-#                #print("Interview Concluded")
-#             elif data['type'] == 'get_analysis':
-#                 analyzed_result = analyze_results(results,llm)
-#                 await websocket.send_json({"type": "analysis", "result": analyzed_result})
-#     except WebSocketDisconnect:
-#        #print("WebSocket disconnected")
+@app.post("/generate_rubrics")
+async def generateRubrics(body: dict):
+    """
+    Generate rubrics based on the provided data.
+    """
+    try:
+        # Extract data from the request body
+        data = body.get("job_description")
+        # print("DATA_JD",data)
+        if not data:
+            return {"error": "No data provided"}
+        
+        # Process the data and generate rubrics
+        rubrics = generate_rubrics(data)
+        
+        return {"rubrics": rubrics}
+    except Exception as e:
+        return {"error": str(e)}
 
 if __name__ == "__main__":
     import uvicorn

@@ -1,176 +1,46 @@
 [
     {
-        "question": "INTRODUCTION",
-        "answer": {
-            "hello! i'm sarah from the hr team it's great to meet you today, anish let's start by introducing yourself?": "Hi, So i am ANish Kumar, I am currently pursuing MAchine LEarning and ENginnering from IIIT Ranchi, I have worked on projects such as AI-CV Reviewer and AI INterviewer, where the prior is used to review the CV of student and suggest them ideas such that they can improve their resume incresing their chance of selection, the former works as an HR which can replace take interviewes so that every candidate can have equal chances of selction. Other than that, I have also build a project where i scrpaed blogs of Will Koherensen, CLeaned data and didi different analysis like topic modelling sentiment analysis, Other than my professional work my hobbies include playing football and listening to songs",
-            "that's really impressive, anish! it sounds like you have a strong passion for ai and a drive to use it for positive impact can you tell me more about your experience with the ai-cv reviewer project?": "Well, i had a very positive expeience, like the project was to be made in a development sprint, and as soon as i hearn i had no idea on how to develop such a project, but there is site called resume worded i used it itried to understand it, After 2 days i build a simple prototypeof how everything will work than we continued to build upon that adding more metrics to review the project",
-            "that's great to hear, anish! it sounds like you were able to learn quickly and adapt to the project requirements can you tell me more about the challenges you faced while working on the ai-cv reviewer project?": "well, the challenges was mostly writing correct prompt or making the ai understand what i want to do with data, also since the data provided by ai has to be relevant, so i studied about prompt engineering how to acheive this, i started asking for reasonong which helped in geenerating beter answer"
-        },
+        "section": "INTRODUCTION",
+        "conversation": [
+            {
+                "interviewer": "hello! i'm Alex from the hr team it's great to meet you today, anish let's start by introducing yourself?",
+                "you": "Hi, So i am ANish Kumar, I am currently pursuing MAchine LEarning and ENginnering from IIIT Ranchi, I have worked on projects such as AI-CV Reviewer..."
+            },
+            {
+                "interviewer": "that's really impressive, anish! it sounds like you have a strong passion for ai and a drive to use it for positive impact can you tell me more about your experience with the ai-cv reviewer project?",
+                "you": "Well, i had a very positive expeience, like the..."
+            },
+            {
+                "interviewer": "that's great to hear, anish! it sounds like you were able to learn quickly and adapt to the project requirements can you tell me more about the challenges you faced while working on the ai-cv reviewer project?",
+                "you": "well, the challenges was mostly writing correct prompt or making the ai understand what i want to do with data, also since the data provided by ai has to be relevant, so i studied about prompt engineering how to acheive this, i started asking for reasonong which helped in geenerating beter answer"
+            }
+        ],
         "analysis": {
             "line_analysis": [
                 {
-                    "line": "hello! i'm sarah from the hr team it's great to meet you today, anish let's start by introducing yourself?",
+                    "line": "Text of the line",
                     "relevance": {
                         "score": 0,
-                        "reasoning": "This line is not relevant to the question asked, which was about the candidate's experience with the AI-CV Reviewer project."
+                        "reasoning": ""
                     },
                     "clarity": {
-                        "score": 5,
-                        "reasoning": "The line is somewhat clear, but it could be improved by using proper capitalization and punctuation."
+                        "score": 0,
+                        "reasoning": ""
                     },
                     "depth": {
                         "score": 0,
-                        "reasoning": "This line does not provide any depth or detail about the candidate's experience with the AI-CV Reviewer project."
+                        "reasoning": ""
                     },
                     "professionalism": {
-                        "score": 5,
-                        "reasoning": "The line is somewhat professional, but it could be improved by using more formal language."
+                        "score": 0,
+                        "reasoning": ""
                     },
                     "technical_accuracy": {
                         "score": 0,
-                        "reasoning": "This line does not contain any technical information."
-                    }
-                },
-                {
-                    "line": "Hi, So i am ANish Kumar, I am currently pursuing MAchine LEarning and ENginnering from IIIT Ranchi, I have worked on projects such as AI-CV Reviewer and AI INterviewer, where the prior is used to review the CV of student and suggest them ideas such that they can improve their resume incresing their chance of selection, the former works as an HR which can replace take interviewes so that every candidate can have equal chances of selction. Other than that, I have also build a project where i scrpaed blogs of Will Koherensen, CLeaned data and didi different analysis like topic modelling sentiment analysis, Other than my professional work my hobbies include playing football and listening to songs",
-                    "relevance": {
-                        "score": 2,
-                        "reasoning": "This line is somewhat relevant to the question asked, as it provides some information about the candidate's experience with AI projects, but it does not specifically address the AI-CV Reviewer project."
-                    },
-                    "clarity": {
-                        "score": 5,
-                        "reasoning": "The line is somewhat clear, but it could be improved by using proper capitalization, punctuation, and grammar."
-                    },
-                    "depth": {
-                        "score": 5,
-                        "reasoning": "This line provides some depth and detail about the candidate's experience with AI projects, but it does not specifically address the AI-CV Reviewer project."
-                    },
-                    "professionalism": {
-                        "score": 5,
-                        "reasoning": "The line is somewhat professional, but it could be improved by using more formal language."
-                    },
-                    "technical_accuracy": {
-                        "score": 5,
-                        "reasoning": "The line contains some technical information, but it is not specific to the AI-CV Reviewer project."
-                    }
-                },
-                {
-                    "line": "that's really impressive, anish! it sounds like you have a strong passion for ai and a drive to use it for positive impact can you tell me more about your experience with the ai-cv reviewer project?",
-                    "relevance": {
-                        "score": 10,
-                        "reasoning": "This line is highly relevant to the question asked, as it specifically asks the candidate to provide more information about their experience with the AI-CV Reviewer project."
-                    },
-                    "clarity": {
-                        "score": 10,
-                        "reasoning": "The line is clear and easy to understand."
-                    },
-                    "depth": {
-                        "score": 0,
-                        "reasoning": "This line does not provide any depth or detail about the candidate's experience with the AI-CV Reviewer project."
-                    },
-                    "professionalism": {
-                        "score": 10,
-                        "reasoning": "The line is professional and uses formal language."
-                    },
-                    "technical_accuracy": {
-                        "score": 0,
-                        "reasoning": "This line does not contain any technical information."
-                    }
-                },
-                {
-                    "line": "Well, i had a very positive expeience, like the project was to be made in a development sprint, and as soon as i hearn i had no idea on how to develop such a project, but there is site called resume worded i used it itried to understand it, After 2 days i build a simple prototypeof how everything will work than we continued to build upon that adding more metrics to review the project",
-                    "relevance": {
-                        "score": 10,
-                        "reasoning": "This line is highly relevant to the question asked, as it provides specific information about the candidate's experience with the AI-CV Reviewer project."
-                    },
-                    "clarity": {
-                        "score": 5,
-                        "reasoning": "The line is somewhat clear, but it could be improved by using proper capitalization, punctuation, and grammar."
-                    },
-                    "depth": {
-                        "score": 5,
-                        "reasoning": "This line provides some depth and detail about the candidate's experience with the AI-CV Reviewer project, but it could be improved by providing more specific examples and details."
-                    },
-                    "professionalism": {
-                        "score": 5,
-                        "reasoning": "The line is somewhat professional, but it could be improved by using more formal language."
-                    },
-                    "technical_accuracy": {
-                        "score": 5,
-                        "reasoning": "The line contains some technical information, but it is not specific to the AI-CV Reviewer project."
-                    }
-                },
-                {
-                    "line": "that's great to hear, anish! it sounds like you were able to learn quickly and adapt to the project requirements can you tell me more about the challenges you faced while working on the ai-cv reviewer project?",
-                    "relevance": {
-                        "score": 10,
-                        "reasoning": "This line is highly relevant to the question asked, as it specifically asks the candidate to provide more information about the challenges they faced while working on the AI-CV Reviewer project."
-                    },
-                    "clarity": {
-                        "score": 10,
-                        "reasoning": "The line is clear and easy to understand."
-                    },
-                    "depth": {
-                        "score": 0,
-                        "reasoning": "This line does not provide any depth or detail about the challenges the candidate faced while working on the AI-CV Reviewer project."
-                    },
-                    "professionalism": {
-                        "score": 10,
-                        "reasoning": "The line is professional and uses formal language."
-                    },
-                    "technical_accuracy": {
-                        "score": 0,
-                        "reasoning": "This line does not contain any technical information."
-                    }
-                },
-                {
-                    "line": "well, the challenges was mostly writing correct prompt or making the ai understand what i want to do with data, also since the data provided by ai has to be relevant, so i studied about prompt engineering how to acheive this, i started asking for reasonong which helped in geenerating beter answer",
-                    "relevance": {
-                        "score": 10,
-                        "reasoning": "This line is highly relevant to the question asked, as it provides specific information about the challenges the candidate faced while working on the AI-CV Reviewer project."
-                    },
-                    "clarity": {
-                        "score": 5,
-                        "reasoning": "The line is somewhat clear, but it could be improved by using proper capitalization, punctuation, and grammar."
-                    },
-                    "depth": {
-                        "score": 5,
-                        "reasoning": "This line provides some depth and detail about the challenges the candidate faced while working on the AI-CV Reviewer project, but it could be improved by providing more specific examples and details."
-                    },
-                    "professionalism": {
-                        "score": 5,
-                        "reasoning": "The line is somewhat professional, but it could be improved by using more formal language."
-                    },
-                    "technical_accuracy": {
-                        "score": 5,
-                        "reasoning": "The line contains some technical information, but it is not specific to the AI-CV Reviewer project."
+                        "reasoning": ""
                     }
                 }
             ],
-            "overall_assessment": {
-                "overall_score": 6.5,
-                "strengths": [
-                    "The candidate was able to provide relevant information about their experience with the AI-CV Reviewer project.",
-                    "The candidate was able to provide some depth and detail about their experience with the AI-CV Reviewer project."
-                ],
-                "areas_for_improvement": [
-                    "The candidate could improve their clarity by using proper capitalization, punctuation, and grammar.",
-                    "The candidate could improve their professionalism by using more formal language.",
-                    "The candidate could improve their depth by providing more specific examples and details about their experience with the AI-CV Reviewer project."
-                ],
-                "suggestions": [
-                    "The candidate could practice answering interview questions in a more formal and professional manner.",
-                    "The candidate could prepare for interviews by reviewing common interview questions and practicing their answers.",
-                    "The candidate could seek feedback from a career counselor or mentor on their interviewing skills."
-                ]
-            }
-        }
-    },
-    {
-        "question": "PROJECT",
-        "answer": {},
-        "analysis": {
-            "line_analysis": [],
             "overall_assessment": {
                 "overall_score": 0,
                 "strengths": [],
@@ -180,412 +50,23 @@
         }
     },
     {
-        "question": "CODING",
-        "answer": {},
-        "analysis": {
-            "line_analysis": [
-                {
-                    "line": "{}",
-                    "relevance": {
-                        "score": 10,
-                        "reasoning": "The candidate's answer is directly relevant to the question about coding, as it provides a valid syntax for an empty object in many programming languages."
-                    },
-                    "clarity": {
-                        "score": 10,
-                        "reasoning": "The answer is clear and concise, providing a simple and unambiguous representation of an empty object."
-                    },
-                    "depth": {
-                        "score": 1,
-                        "reasoning": "The answer is not particularly in-depth or detailed, as it only provides a basic representation of an empty object without any further explanation or context."
-                    },
-                    "professionalism": {
-                        "score": 10,
-                        "reasoning": "The answer is professional and appropriate for an HR interview, as it is concise, objective, and relevant to the question."
-                    },
-                    "technical_accuracy": {
-                        "score": 10,
-                        "reasoning": "The answer is technically accurate, as it represents a valid syntax for an empty object in many programming languages."
-                    }
-                }
-            ],
-            "overall_assessment": {
-                "overall_score": 8.2,
-                "strengths": [
-                    "High relevance to the question",
-                    "Clear and concise",
-                    "Professional and appropriate",
-                    "Technically accurate"
-                ],
-                "areas_for_improvement": [
-                    "Lack of depth or detail"
-                ],
-                "suggestions": [
-                    "The candidate could have provided a brief explanation of the purpose or usage of an empty object in coding.",
-                    "They could have mentioned specific programming languages where the provided syntax is applicable.",
-                    "Adding examples or scenarios where empty objects are commonly used would have enhanced the depth of the answer."
-                ]
+        "section": "CONCLUSION",
+        "conversation": [
+            {
+                "interviewer": "thank you for sharing your experiences and insights with me today, anish! it was a pleasure speaking with you and learning more about your background and projects do you have any questions for me before we wrap up?",
+                "you": "No, I am good, thank you for the opportunity"
             }
-        }
+        ]
     },
     {
-        "question": "TECHNICAL",
-        "answer": {
-            "great, now let's move on to some technical questions i see you have experience with machine learning algorithms could you explain how you've applied machine learning algorithms in a recent project?": "yes so i have applied machine learning algorithms to predict whether a mushroom was poisionous or not, I used Xgboost for prediction, Also i had to drop most of columns because of too much missing and i imputed values on the others",
-            "interesting can you explain how you handled the missing values in more detail? what imputation techniques did you use and why?": "well i used many imputation technique depending on the number of missing values, for low missing values for categories i used mode and for continuous data i used mean, other than that for too many missing values i used KNN iputation and if too much was missing i dropped it.",
-            "i see what factors did you consider when selecting the appropriate imputation technique for each variable?": "well, i plotted the values for continuius data i saw if there was any outlier or not and used it to judge whether to use median or mean",
-            "that's good can you describe a situation where you had to deal with a large dataset and how you ensured data quality? what challenges did you face and how did you overcome them?": "i didn't get the chance to work on the very large dataset till now , but i hope i will get that chance with your company",
-            "i understand let's move to the next phase ": "okay"
-        },
-        "analysis": {
-            "line_analysis": [
-                {
-                    "line": "yes so i have applied machine learning algorithms to predict whether a mushroom was poisionous or not, I used Xgboost for prediction, Also i had to drop most of columns because of too much missing and i imputed values on the others",
-                    "relevance": {
-                        "score": 8,
-                        "reasoning": "The line is directly relevant to the question as it provides an example of applying machine learning algorithms to a specific project."
-                    },
-                    "clarity": {
-                        "score": 7,
-                        "reasoning": "The line is generally clear and understandable, but it could be improved by providing more context and explaining the purpose of the project."
-                    },
-                    "depth": {
-                        "score": 6,
-                        "reasoning": "The line provides a basic overview of the project, but it lacks specific details and technical depth."
-                    },
-                    "professionalism": {
-                        "score": 7,
-                        "reasoning": "The language is professional and appropriate for a technical interview."
-                    },
-                    "technical_accuracy": {
-                        "score": 8,
-                        "reasoning": "The information provided is technically accurate and demonstrates a basic understanding of machine learning algorithms."
-                    }
-                },
-                {
-                    "line": "well i used many imputation technique depending on the number of missing values, for low missing values for categories i used mode and for continuous data i used mean, other than that for too many missing values i used KNN iputation and if too much was missing i dropped it.",
-                    "relevance": {
-                        "score": 9,
-                        "reasoning": "The line is highly relevant as it provides a detailed explanation of the imputation techniques used."
-                    },
-                    "clarity": {
-                        "score": 8,
-                        "reasoning": "The line is clear and easy to understand, providing specific examples of imputation techniques."
-                    },
-                    "depth": {
-                        "score": 7,
-                        "reasoning": "The line provides a good level of depth, explaining the different imputation techniques based on the number of missing values."
-                    },
-                    "professionalism": {
-                        "score": 8,
-                        "reasoning": "The language is professional and appropriate for a technical interview."
-                    },
-                    "technical_accuracy": {
-                        "score": 9,
-                        "reasoning": "The information provided is technically accurate and demonstrates a good understanding of imputation techniques."
-                    }
-                },
-                {
-                    "line": "well, i plotted the values for continuius data i saw if there was any outlier or not and used it to judge whether to use median or mean",
-                    "relevance": {
-                        "score": 7,
-                        "reasoning": "The line is somewhat relevant as it provides a specific example of how missing values were handled."
-                    },
-                    "clarity": {
-                        "score": 6,
-                        "reasoning": "The line is somewhat clear but could be improved by providing more context and explaining the rationale behind using median or mean."
-                    },
-                    "depth": {
-                        "score": 5,
-                        "reasoning": "The line lacks depth and does not provide sufficient detail on the process of handling missing values."
-                    },
-                    "professionalism": {
-                        "score": 7,
-                        "reasoning": "The language is professional but could be improved by using more precise and technical terms."
-                    },
-                    "technical_accuracy": {
-                        "score": 7,
-                        "reasoning": "The information provided is technically accurate but lacks specific details and examples."
-                    }
-                },
-                {
-                    "line": "i didn't get the chance to work on the very large dataset till now , but i hope i will get that chance with your company",
-                    "relevance": {
-                        "score": 0,
-                        "reasoning": "The line is not relevant to the question as it does not provide any information on handling large datasets or ensuring data quality."
-                    },
-                    "clarity": {
-                        "score": 6,
-                        "reasoning": "The line is clear and easy to understand, but it lacks substance and does not address the question."
-                    },
-                    "depth": {
-                        "score": 0,
-                        "reasoning": "The line lacks depth and does not provide any specific examples or technical details."
-                    },
-                    "professionalism": {
-                        "score": 7,
-                        "reasoning": "The language is professional but could be improved by providing a more positive and enthusiastic response."
-                    },
-                    "technical_accuracy": {
-                        "score": 0,
-                        "reasoning": "The line does not provide any technical information or demonstrate any technical skills."
-                    }
-                }
-            ],
-            "overall_assessment": {
-                "overall_score": 7,
-                "strengths": [
-                    "Demonstrates a basic understanding of machine learning algorithms and imputation techniques.",
-                    "Provides clear and concise explanations of the imputation techniques used.",
-                    "Uses professional and appropriate language."
-                ],
-                "areas_for_improvement": [
-                    "Could provide more depth and specific examples in the answers.",
-                    "Could improve clarity by providing more context and explaining the rationale behind decisions.",
-                    "Could address the question on handling large datasets and ensuring data quality more effectively."
-                ],
-                "suggestions": [
-                    "Provide more specific examples and technical details when describing the machine learning project and the imputation techniques used.",
-                    "Explain the purpose of the project and the context in which the machine learning algorithms were applied.",
-                    "Provide more information on the challenges faced when handling large datasets and the specific strategies used to ensure data quality."
-                ]
+        "parameter_evaluation": [
+            {
+                "parameter": "Parameter Name",
+                "score": 0,
+                "evidence": "Evidence from answer",
+                "analysis": "Detailed analysis",
+                "weightage": 0
             }
-        }
-    },
-    {
-        "question": "OUTRO",
-        "answer": {
-            "we're coming to the end of our interview, and i want to thank you for sharing your experiences with me before we wrap up, i have a couple of final questions for you ": "okay",
-            "great first, is there anything else you'd like to add about your experience or qualifications that we haven't covered yet?": "well nothin new i can mention which i have not mentioned till now",
-            "okay and how do you think your skills and experience align with the requirements of this role?": "well since this is a role for AI INtern, I think my project and expreince with those projects will be very helpful for this role",
-            "i agree and finally, how interested are you in this role and our company? do you have any questions for me before we move to the next phase?": "very deeply interested and no i don't have any question"
-        },
-        "analysis": {
-            "line_analysis": [
-                {
-                    "line": "we're coming to the end of our interview, and i want to thank you for sharing your experiences with me",
-                    "relevance": {
-                        "score": 0,
-                        "reasoning": "This line is not relevant to the question asked, which is about the candidate's experience and qualifications."
-                    },
-                    "clarity": {
-                        "score": 7,
-                        "reasoning": "The line is clear and easy to understand."
-                    },
-                    "depth": {
-                        "score": 0,
-                        "reasoning": "The line does not provide any in-depth information."
-                    },
-                    "professionalism": {
-                        "score": 7,
-                        "reasoning": "The language and content are professional."
-                    },
-                    "technical_accuracy": {
-                        "score": 0,
-                        "reasoning": "This line does not contain any technical information."
-                    }
-                },
-                {
-                    "line": "before we wrap up, i have a couple of final questions for you",
-                    "relevance": {
-                        "score": 0,
-                        "reasoning": "This line is not relevant to the question asked, which is about the candidate's experience and qualifications."
-                    },
-                    "clarity": {
-                        "score": 7,
-                        "reasoning": "The line is clear and easy to understand."
-                    },
-                    "depth": {
-                        "score": 0,
-                        "reasoning": "The line does not provide any in-depth information."
-                    },
-                    "professionalism": {
-                        "score": 7,
-                        "reasoning": "The language and content are professional."
-                    },
-                    "technical_accuracy": {
-                        "score": 0,
-                        "reasoning": "This line does not contain any technical information."
-                    }
-                },
-                {
-                    "line": "okay",
-                    "relevance": {
-                        "score": 0,
-                        "reasoning": "This line is not relevant to the question asked, which is about the candidate's experience and qualifications."
-                    },
-                    "clarity": {
-                        "score": 7,
-                        "reasoning": "The line is clear and easy to understand."
-                    },
-                    "depth": {
-                        "score": 0,
-                        "reasoning": "The line does not provide any in-depth information."
-                    },
-                    "professionalism": {
-                        "score": 7,
-                        "reasoning": "The language and content are professional."
-                    },
-                    "technical_accuracy": {
-                        "score": 0,
-                        "reasoning": "This line does not contain any technical information."
-                    }
-                },
-                {
-                    "line": "great first, is there anything else you'd like to add about your experience or qualifications that we haven't covered yet?",
-                    "relevance": {
-                        "score": 10,
-                        "reasoning": "This line is directly relevant to the question asked, which is about the candidate's experience and qualifications."
-                    },
-                    "clarity": {
-                        "score": 9,
-                        "reasoning": "The line is clear and easy to understand."
-                    },
-                    "depth": {
-                        "score": 7,
-                        "reasoning": "The line provides a specific prompt for the candidate to add additional information."
-                    },
-                    "professionalism": {
-                        "score": 9,
-                        "reasoning": "The language and content are professional."
-                    },
-                    "technical_accuracy": {
-                        "score": 0,
-                        "reasoning": "This line does not contain any technical information."
-                    }
-                },
-                {
-                    "line": "well nothin new i can mention which i have not mentioned till now",
-                    "relevance": {
-                        "score": 10,
-                        "reasoning": "This line is directly relevant to the question asked, which is about the candidate's experience and qualifications."
-                    },
-                    "clarity": {
-                        "score": 7,
-                        "reasoning": "The line is clear and easy to understand."
-                    },
-                    "depth": {
-                        "score": 5,
-                        "reasoning": "The line provides a brief and concise answer, but it could be more detailed."
-                    },
-                    "professionalism": {
-                        "score": 7,
-                        "reasoning": "The language and content are professional."
-                    },
-                    "technical_accuracy": {
-                        "score": 0,
-                        "reasoning": "This line does not contain any technical information."
-                    }
-                },
-                {
-                    "line": "okay and how do you think your skills and experience align with the requirements of this role?",
-                    "relevance": {
-                        "score": 10,
-                        "reasoning": "This line is directly relevant to the question asked, which is about the candidate's experience and qualifications."
-                    },
-                    "clarity": {
-                        "score": 9,
-                        "reasoning": "The line is clear and easy to understand."
-                    },
-                    "depth": {
-                        "score": 7,
-                        "reasoning": "The line provides a specific prompt for the candidate to explain how their skills and experience align with the role."
-                    },
-                    "professionalism": {
-                        "score": 9,
-                        "reasoning": "The language and content are professional."
-                    },
-                    "technical_accuracy": {
-                        "score": 0,
-                        "reasoning": "This line does not contain any technical information."
-                    }
-                },
-                {
-                    "line": "well since this is a role for AI INtern, I think my project and expreince with those projects will be very helpful for this role",
-                    "relevance": {
-                        "score": 10,
-                        "reasoning": "This line is directly relevant to the question asked, which is about the candidate's experience and qualifications."
-                    },
-                    "clarity": {
-                        "score": 7,
-                        "reasoning": "The line is clear and easy to understand."
-                    },
-                    "depth": {
-                        "score": 7,
-                        "reasoning": "The line provides a specific example of how the candidate's skills and experience align with the role."
-                    },
-                    "professionalism": {
-                        "score": 7,
-                        "reasoning": "The language and content are professional."
-                    },
-                    "technical_accuracy": {
-                        "score": 0,
-                        "reasoning": "This line does not contain any technical information."
-                    }
-                },
-                {
-                    "line": "i agree and finally, how interested are you in this role and our company? do you have any questions for me before we move to the next phase?",
-                    "relevance": {
-                        "score": 10,
-                        "reasoning": "This line is directly relevant to the question asked, which is about the candidate's experience and qualifications."
-                    },
-                    "clarity": {
-                        "score": 9,
-                        "reasoning": "The line is clear and easy to understand."
-                    },
-                    "depth": {
-                        "score": 7,
-                        "reasoning": "The line provides a specific prompt for the candidate to express their interest in the role and company."
-                    },
-                    "professionalism": {
-                        "score": 9,
-                        "reasoning": "The language and content are professional."
-                    },
-                    "technical_accuracy": {
-                        "score": 0,
-                        "reasoning": "This line does not contain any technical information."
-                    }
-                },
-                {
-                    "line": "very deeply interested and no i don't have any question",
-                    "relevance": {
-                        "score": 10,
-                        "reasoning": "This line is directly relevant to the question asked, which is about the candidate's experience and qualifications."
-                    },
-                    "clarity": {
-                        "score": 7,
-                        "reasoning": "The line is clear and easy to understand."
-                    },
-                    "depth": {
-                        "score": 7,
-                        "reasoning": "The line provides a specific answer to the question."
-                    },
-                    "professionalism": {
-                        "score": 7,
-                        "reasoning": "The language and content are professional."
-                    },
-                    "technical_accuracy": {
-                        "score": 0,
-                        "reasoning": "This line does not contain any technical information."
-                    }
-                }
-            ],
-            "overall_assessment": {
-                "overall_score": 8.1,
-                "strengths": [
-                    "The candidate's answers were generally relevant to the questions asked.",
-                    "The candidate's answers were clear and easy to understand.",
-                    "The candidate's answers were professional and well-written."
-                ],
-                "areas_for_improvement": [
-                    "The candidate's answers could have been more in-depth and detailed.",
-                    "The candidate could have provided more specific examples of their skills and experience."
-                ],
-                "suggestions": [
-                    "When answering questions about your experience and qualifications, be sure to provide specific examples that demonstrate your skills and abilities.",
-                    "Be prepared to answer questions about your interest in the role and company.",
-                    "Practice your answers to common interview questions so that you can deliver them confidently and effectively."
-                ]
-            }
-        }
+        ]
     }
 ]

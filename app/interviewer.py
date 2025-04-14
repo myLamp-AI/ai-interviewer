@@ -1,3 +1,4 @@
+# /app/interviewer.py
 import os
 import re
 import sys
@@ -19,8 +20,6 @@ GOOGLE_API_KEY = os.getenv("GOOGLE_API_KEY")
 
 class InterviewBot:
     def __init__(self, cv_text, job_description, results):
-        #self.stages = ["CODING", "TECHNICAL", "OUTRO"]
-        #self.stages = [ "PROJECT", "CODING", "TECHNICAL", "OUTRO"]
         self.stages = ["INTRODUCTION", "PROJECT", "CODING", "TECHNICAL", "OUTRO"]
         self.message_history = ChatMessageHistory()
         self.result = results
@@ -28,6 +27,8 @@ class InterviewBot:
         self.current_answer = None
         self.stop_interview = asyncio.Event()
         self.coding_event = asyncio.Event()
+        self.current_stage = "INTRODUCTION"  # Track current stage
+        self.last_question = None  # Track last question
 
         try:
             genai.configure(api_key=GOOGLE_API_KEY)
@@ -86,27 +87,36 @@ class InterviewBot:
 
     async def conduct_interview(self, websocket):
         prompt = ""
+        
         for stage in self.stages:
-           #print(f"\n--- {stage} STAGE ---")
             try:
+                self.current_stage = stage
                 self.message_history = ChatMessageHistory()
                 if stage == "TECHNICAL":
                     prompt = PROMPTS[stage].format(skills=self.cv_parts[stage], job_description=self.job_description)
-                elif stage == "CODING":
-                    for i in range(2):
-                        await self.start_coding_stage(websocket=websocket)
-                    await websocket.send_json({'type': 'coding_ended', 'message': "The End of Coding Round"})
-                    continue
+                # elif stage == "CODING":
+                #     for i in range(2):
+                #         await self.start_coding_stage(websocket=websocket)
+                #     await websocket.send_json({'type': 'coding_ended', 'message': "The End of Coding Round"})
+                #     continue
                 else:
                     try:
                         cleaned_text = self.cv_parts[stage].replace("{", "").replace("}", "")
                         prompt = PROMPTS[stage].format(variable=cleaned_text)
-                       #print(prompt)
                     except Exception as e:
-                       print(e)
+                        print(e)
 
                 while True:
                     if self.stop_interview.is_set():
+                        if self.last_question:
+                            if "conversation" not in self.result[self.current_stage]:
+                                self.result[self.current_stage]["conversation"] = []
+                            
+                            self.result[self.current_stage]["conversation"].append({
+                                "interviewer": self.last_question,
+                                "you": ""  # Empty string for unanswered question
+                            })
+                            self.last_question = None  # Clear after storing
                         return
 
                     response = self.get_ai_response(prompt, "Ask your question or exit the interview")
@@ -124,91 +134,137 @@ class InterviewBot:
                     if not response:
                         break
 
-                   #print("Interviewer:", response)
+                    # print("Interviewer:", response)
+                    self.last_question = response
                     await websocket.send_json({'type': 'interview_question', 'question': response})
 
                     try:
-                        await asyncio.wait_for(self.answer_event.wait(), timeout=300)  # 5-minute timeout for answer
+                        await asyncio.wait_for(self.answer_event.wait(), timeout=300)
                         answer = self.current_answer
                         self.current_answer = None
                         self.answer_event.clear()
+                        self.last_question = None
                     except asyncio.TimeoutError:
                         await websocket.send_json({'type': 'answer_timeout', 'message': 'Answer timed out'})
                         break
 
-                   #print("You:", answer)
+                    # print("You:", answer)
                     if answer and "exit" in answer.lower():
                         return
 
                     self.message_history.add_user_message(answer)
 
+                    # Store conversation in the new format
+                    if stage != "CODING":
+                        # Add conversation to the appropriate section
+                        if "conversation" not in self.result[stage]:
+                            self.result[stage]["conversation"] = []
+                        
+                        self.result[stage]["conversation"].append({
+                            "interviewer": response,
+                            "you": answer
+                        })
+                    
                     if move_to_new_phase:
                         break
-                    if stage != "CODING":
-                        self.result[stage][response] = answer
                     await asyncio.sleep(0.1)
-
             except Exception as e:
                #print(f"Error in {stage} stage: {str(e)}")
                 await websocket.send_json({'type': 'stage_error', 'message': f'Error in {stage} stage: {str(e)}'})
                 continue
-
        #print("\nInterview concluded. Thank you for your time!")
         await websocket.send_json({'type': 'interview_end', 'message': 'Interview completed'})
 
 
 
 
-async def conduct_interview(interview_bot, websocket,stop_interview):
-    for stage in interview_bot.stages:
-       #print(f"\n--- {stage} STAGE ---")
-        
-        interview_bot.message_history = ChatMessageHistory()
-        if stage == "TECHNICAL":
-            prompt = PROMPTS[stage].format(skills=interview_bot.cv_parts[stage], job_description=interview_bot.job_description)
-        else:
-            prompt = PROMPTS[stage].format(variable=interview_bot.cv_parts[stage])
+# async def conduct_interview(self, websocket):
+#     for stage in self.stages:
+#         self.message_history = ChatMessageHistory()
+#         if stage == "TECHNICAL":
+#             prompt = PROMPTS[stage].format(skills=self.cv_parts[stage], job_description=self.job_description)
+#         elif stage == "CODING":
+#             for i in range(2):
+#                 await self.start_coding_stage(websocket=websocket)
+#             await websocket.send_json({'type': 'coding_ended', 'message': "The End of Coding Round"})
+#             continue
+#         else:
+#             try:
+#                 cleaned_text = self.cv_parts[stage].replace("{", "").replace("}", "")
+#                 prompt = PROMPTS[stage].format(variable=cleaned_text)
+#             except Exception as e:
+#                 print(e)
 
-        while not stop_interview.is_set():
-            if stop_interview.is_set():
-                return
-            response = interview_bot.get_ai_response(prompt, "Ask your question or exit the interview")
+#         while True:
+#             if self.stop_interview.is_set():
+#                 # Store the last question without answer before exiting
+#                 if hasattr(self, 'last_question') and self.last_question:
+#                     if "conversation" not in self.result[stage]:
+#                         self.result[stage]["conversation"] = []
+                    
+#                     self.result[stage]["conversation"].append({
+#                         "interviewer": self.last_question,
+#                         "you": ""  # Empty string for unanswered question
+#                     })
+#                 return
+
+#             response = self.get_ai_response(prompt, "Ask your question or exit the interview")
             
-            next_phase = response.find("move to next phase")
-            coding_phase = response.find("coding phase")
-            if next_phase != -1:
-                response = response[:next_phase]
-                move_to_new_phase = True
-            elif coding_phase != -1:
-                pass
-            else:
-                move_to_new_phase = False
-            if response:
-                if "exit" in response or "interview concluded" in response:
-                    break
+#             next_phase = response.find("next phase")
+#             if next_phase != -1:
+#                 response = response[:next_phase]
+#                 move_to_new_phase = True
+#             else:
+#                 move_to_new_phase = False
 
-           #print("Interviewer:", response)
-            #interview_bot.text_to_speech(response)
-            await websocket.send_json({'type': 'interview_question', 'question': response})
+#             if response:
+#                 if "exit" in response or "interview concluded" in response:
+#                     break
+#             if not response:
+#                 break
 
-           #print("Please speak your answer...")
-            answer_data = await websocket.receive_json()
-            answer = answer_data.get('answer', '')
-           #print("You:", answer)
-            if answer:
-                if "exit" in answer:
-                    return
+#             # Store the question in case the interview ends before answer
+#             self.last_question = response
 
-            interview_bot.message_history.add_user_message(answer)
+#             print("Interviewer:", response)
+#             await websocket.send_json({'type': 'interview_question', 'question': response})
 
-            if move_to_new_phase:
-                break
-            if coding_phase:
-                await websocket.send_json({"type":"start_coding",'message':'Starting Coding related Questions'})
-                break
-            interview_bot.result[response] = answer
-            await asyncio.sleep(0.1)
+#             try:
+#                 await asyncio.wait_for(self.answer_event.wait(), timeout=300)
+#                 answer = self.current_answer
+#                 self.current_answer = None
+#                 self.answer_event.clear()
+#                 # Clear the last question after it's been answered
+#                 self.last_question = None
+#             except asyncio.TimeoutError:
+#                 # Store the unanswered question with empty answer
+#                 if "conversation" not in self.result[stage]:
+#                     self.result[stage]["conversation"] = []
+                
+#                 self.result[stage]["conversation"].append({
+#                     "interviewer": response,
+#                     "you": ""  # Empty string for timed out answer
+#                 })
+#                 await websocket.send_json({'type': 'answer_timeout', 'message': 'Answer timed out'})
+#                 break
+
+#             print("You:", answer)
+#             if answer and "exit" in answer.lower():
+#                 return
+
+#             self.message_history.add_user_message(answer)
+
+#             # Store conversation in the new format
+#             if stage != "CODING":
+#                 # Add conversation to the appropriate section
+#                 if "conversation" not in self.result[stage]:
+#                     self.result[stage]["conversation"] = []
+                
+#                 self.result[stage]["conversation"].append({
+#                     "interviewer": response,
+#                     "you": answer
+#                 })
             
-   #print("\nInterview concluded. Thank you for your time!")
-    await websocket.send_json({'type': 'interview_end', 'message': 'Interview completed'}) 
-    return
+#             if move_to_new_phase:
+#                 break
+#             await asyncio.sleep(0.1)
