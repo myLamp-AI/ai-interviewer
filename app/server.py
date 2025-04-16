@@ -27,7 +27,7 @@ app.add_middleware(
 
 @app.get('/')
 async def root():
-    return {"data":"HELLO WORLD"}
+    return {"data":"HELLO WORLD from v1"}
 logging.basicConfig(level=logging.INFO)
 # State management
 class InterviewState:
