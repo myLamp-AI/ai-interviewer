@@ -118,7 +118,8 @@ class InterviewBot:
                             })
                             self.last_question = None  # Clear after storing
                         return
-
+                    prompt=prompt+"\n\n***Generate a response in a natural, conversational tone suitable for text-to-speech applications.Ensure the output includes appropriate punctuation to enhance the clarity and expressiveness of the spoken text.Use varied sentence structures and incorporate pauses where necessary to mimic human speech patterns.The tone should be friendly and engaging, making the listener feel as if they are part of a casual conversation.Avoid overly complex language and maintain a level of simplicity that is accessible to a wide audience.\n\n"
+                    
                     response = self.get_ai_response(prompt, "Ask your question or exit the interview")
                     
                     next_phase = response.find("next phase")
