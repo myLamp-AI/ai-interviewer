@@ -8,13 +8,14 @@ import sys
 import re
 sys.path.append(os.path.dirname(os.path.abspath(__file__)))
 import time
+
 from dotenv import load_dotenv
 load_dotenv()
 
 llm = ChatGoogleGenerativeAI(model="gemini-2.0-flash-lite", temperature=0.3,api_key=os.getenv("GOOGLE_API_KEY"))
 
 
-def analyze_results(results, llm=None, rubrics=None):
+def analyze_results(results, llm=None,  rubrics=None):
     if not rubrics:
         raise ValueError("Rubrics must be provided for evaluation")
     
